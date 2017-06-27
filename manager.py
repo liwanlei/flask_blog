@@ -25,10 +25,4 @@ moment=Moment(app)
 manager.add_command('run',Server(use_debugger=True))
 app.permanent_session_lifetime=timedelta(minutes=5)
 if __name__ == '__main__':
-	handler = logging.FileHandler('.\log\\flask.log', encoding='UTF-8')
-	handler.setLevel(logging.INFO)
-	logging_format = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s')
-	handler.setFormatter(logging_format)
-	app.logger.addHandler(handler)
-	app.config['BABEL_DEFAULT_LOCALE'] = 'zh_CN'
-	app.run(debug=True)
+	manager.run()

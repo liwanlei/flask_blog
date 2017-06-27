@@ -168,19 +168,19 @@ def new_post():
       new_post=Post(title=form.title.data,text=form.text.data,publish_date=datetime.datetime.now(),is_recomment=is_recomment)
       fenlei1=request.form.get('optionsRadios')
       classnmae=Classifa.query.filter_by(name=fenlei1).all()
-      user_id=User.query.filter_by(username=session['username']).first()
+      user_id=User.query.filter_by(username=session['username']).first().id
       tag_s=request.form.getlist('tag')
       newpost_tag=[]
       for tag in tag_s:
         new_tag=Tag.query.filter_by(name=tag).first()
         newpost_tag.append(new_tag)
+      new_post.user_id=user_id
       new_post.tag=newpost_tag
       new_post.classname=classnmae
       db.session.add(new_post)
       db.session.commit()
       return  redirect(url_for('home'))
   return render_template('newpost.html',tags=tags,fenleis=fenlei,form=form)
-
 @app.route('/person',methods=['GET','POST'])
 def center_person():
   if not session.get('username'):
@@ -188,5 +188,13 @@ def center_person():
   user_id=User.query.filter_by(username=session.get('usernmae')).first()
   posts=Post.query.filter_by(user_id=user_id).all()
   tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
-  pingluns=Post.query.filter_by(user_id=user_id).first()
-  return render_template('person_center.html',posts=posts,tuijian_posts=tuijian_posts)
+  tag_in=[]
+  for post in posts:
+    tag_in.append(post.classname[0])
+  fenleis=set(tag_in)
+  return render_template('person_center.html',posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
+@app.route('/person/fenlei/<user_id>',methods=['GET','POST'])
+def fenleiperson(user_id):
+  post_fenlei=Classifa.query.filter_by(name='java').first()
+  print(post_fenlei.posts)
+  return render_template('person_center.html')

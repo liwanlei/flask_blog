@@ -11,7 +11,6 @@ followers = db.Table('followers',
     db.Column('follower_id', db.Integer(), db.ForeignKey('users.id')),
     db.Column('followed_id', db.Integer(), db.ForeignKey('users.id'))
 )
-
 post_class=db.Table('post_class',
     db.Column('post_id',db.Integer(),db.ForeignKey('posts.id')),
     db.Column('classifa_id',db.Integer(),db.ForeignKey('fenlei.id')))
