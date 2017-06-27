@@ -1,0 +1,71 @@
+{%extends 'base.html'%}
+{% block title %}{{post.title}}{% endblock %}
+{% block body%}
+<h2><a href=""> {{post.title}}</a></h2>
+<p>{{post.text|safe}}</p>
+    <span class="glyphicon glyphicon-tag">标签</span> {%for tag in post.tag%}<a href='#'>{{tag}}</a>
+    {%endfor%}&nbsp;
+    <p>&nbsp;</p>
+<p>
+ <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<a>{{user.username}}</a>
+<span  style="margin: 0 5px 0 0;">&nbsp;于&nbsp;<a href=''>{{post.publish_date}}&nbsp;</a></span>发布
+&nbsp;&nbsp;
+<a href=''><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-pencil"></span>&nbsp;编辑</a>&nbsp;
+<a href='{{url_for('new_post')}}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-edit"></span>&nbsp;写文章</a>
+</p> 
+<h3>评论:</h3>
+  {% if session.username %}
+  <form method="POST" action="{{ url_for('post', post_id=post.id)
+    }}">  
+    {{ form.hidden_tag() }}
+    <p>  作者:<a >
+      {{ session.username }}
+        </a>
+    </p>
+    <p class="form-group">
+      {{ form.text.label }}
+      {% if form.text.errors %}
+        {% for e in form.text.errors %}
+          <p class="help-block">{{ e }}</p>
+        {% endfor %}
+      {% endif %}
+      {{ form.text(class_='text')|safe }}
+    </p>
+    <input class="btn btn-primary" type="submit" value="添加评论" >
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <p class=flashes style="color:#F00">
+    {% for message in messages %}
+      <p style="color:#F00">{{ message }}</p>
+    {% endfor %}
+    </p>
+  {% endif %}
+{% endwith %}
+  </form>
+  {% else %}
+   请<a href="{{ url_for('login') }}">登录</a>或<a href="{{url_for('reg')}}">注册</a>后在进行评论
+  {% endif %}
+      <h4>----------------------------</h4>
+      {% for comment in comments %}
+          <div style="padding: 9px">
+               <h5>评论者：<a href="">{{comment.users}}</a>  时间：{{ comment.date  }} </h5>
+          <a style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </div>
+      {% endfor %}
+{%endblock%}
+{% block tuijian %}
+    {%for tui in tuijian_post%}
+    <p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></P>
+    {%endfor%}
+        {% endblock %}
+{%block link%}
+{%for link1 in link%}
+<p><a href='{{link1.url}}'>{{link1.name}}</a></P>
+{%endfor%}
+{% endblock %}
+{%block js %}
+    
+<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('text');
+</script>{%endblock%}
