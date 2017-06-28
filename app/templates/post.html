@@ -10,7 +10,7 @@
  <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<a>{{user.username}}</a>
 <span  style="margin: 0 5px 0 0;">&nbsp;于&nbsp;{{post.publish_date}}&nbsp;</span>发布
 &nbsp;&nbsp;
-<a href=''><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-pencil"></span>&nbsp;编辑</a>&nbsp;
+<a href='{{ url_for('edit',post_id=post.id) }}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-pencil"></span>&nbsp;编辑</a>&nbsp;
 <a href='{{url_for('new_post')}}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-edit"></span>&nbsp;写文章</a>
 </p> 
 <h3>评论:</h3>
@@ -29,9 +29,9 @@
           <p class="help-block">{{ e }}</p>
         {% endfor %}
       {% endif %}
-      {{ form.text(class_='text')|safe }}
+      {{ form.text(class_='text' ,id='newName')|safe }}
     </p>
-    <input class="btn btn-primary" type="submit" value="添加评论">
+    <input class="btn btn-primary" type="submit" value="评论" >
     {% with messages = get_flashed_messages() %}
   {% if messages %}
     <p class=flashes style="color:#F00">
@@ -47,7 +47,7 @@
   {% endif %}
       <h4>----------------------------</h4>
       {% for comment in comments %}
-          <div style="padding: 9px">
+          <div style="padding: 9px;word-wrap : break-word ;">
                <h5>评论者：<a href="">{{comment.users}}</a>  时间：{{ comment.date  }} </h5>
           <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </div>

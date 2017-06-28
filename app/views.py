@@ -68,12 +68,10 @@ def post(post_id):
   comment=Comment.query.filter_by(post_id=post.id).all()
   form=CommentFrom()
   if form.validate_on_submit:
-    print('ok')
     try:
       user_comment=session['username']
       user_id=User.query.filter_by(username=user_comment).first().id
       comment_ip=request.remote_addr
-      print(user_comment)
       text_comment=form.text.data
       date_now=datetime.datetime.now()
       add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
@@ -229,3 +227,39 @@ def tag(tag):
                            posts=posts,
                            tuijian_post=tuijian_post,fenleis=fenlei,                
                            links=link)
+@app.route('/edit/<string:post_id>',methods=['GET',"POST"])
+def edit(post_id):
+    if not session.get('username'):
+        return redirect(url_for('login'))
+    post=Post.query.filter_by(id=post_id).first()
+    form=PostForm()
+    tags = db.session.query(Tag).all()
+    fenleis = db.session.query(Classifa).all()
+    post_user=User.query.filter_by(id=post.user_id).first().username
+    if session['username']!=post_user:
+        return  redirect(url_for('center_person'))
+    if form.validate_on_submit():
+        if request.form.get("checkbox") == None:
+            is_recomment = False
+        else:
+            is_recomment = True
+        post.is_recomment=is_recomment
+        fenlei1 = request.form.get('optionsRadios')
+        classnmae = Classifa.query.filter_by(name=fenlei1).all()
+        user_id = User.query.filter_by(username=session['username']).first().id
+        tag_s = request.form.getlist('tag')
+        newpost_tag = []
+        for tag in tag_s:
+            new_tag = Tag.query.filter_by(name=tag).first()
+            newpost_tag.append(new_tag)
+        post.tag = newpost_tag
+        post.classname = classnmae
+        post.title = form.title.data
+        post.text = form.text.data
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('post',post_id=post_id))
+    form=PostForm()
+    form.title.data=post.title
+    form.text.data=post.text
+    return render_template('edit.html',form=form,tags=tags,fenleis=fenleis)

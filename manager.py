@@ -4,12 +4,10 @@
 from flask_script import Manager,Server
 from  app import app,db
 from  datetime import  timedelta
-from app.models import User,Post,Tag,Comment
 import logging
 from flask_admin import Admin,AdminIndexView
 from common.admin_view import UserView,LinkView,CommentView,PostView,TagView,ClassView
 from flask_admin.contrib.sqla import  ModelView
-from flask_babel import Babel
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_moment import Moment
 flask_admin = Admin(app,name=u'后台管理系统')
@@ -20,7 +18,6 @@ flask_admin.add_view(PostView(db.session,name='文章'))
 flask_admin.add_view(TagView(db.session,name='标签'))
 flask_admin.add_view(ClassView(db.session,name='分类'))
 manager=Manager(app)
-babel=Babel(app)
 moment=Moment(app)
 manager.add_command('run',Server(use_debugger=True))
 app.permanent_session_lifetime=timedelta(minutes=10)
