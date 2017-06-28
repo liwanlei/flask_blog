@@ -68,15 +68,21 @@ def post(post_id):
   comment=Comment.query.filter_by(post_id=post.id).all()
   form=CommentFrom()
   if form.validate_on_submit:
-    user_comment=session['username']
-    user_id=User.query.filter_by(username=user_comment).first().id
-    comment_ip=request.remote_addr
-    text_comment=form.text.data
-    date_now=datetime.datetime.now()
-    add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
-    db.session.add(add_comment)
-    db.session.commit()
-    return render_template('post.html',post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
+    print('ok')
+    try:
+      user_comment=session['username']
+      user_id=User.query.filter_by(username=user_comment).first().id
+      comment_ip=request.remote_addr
+      print(user_comment)
+      text_comment=form.text.data
+      date_now=datetime.datetime.now()
+      add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
+      db.session.add(add_comment)
+      db.session.commit()
+      return render_template('post.html',post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
+    except:
+      return render_template('post.html',post=post,user=user,
+    form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
   return render_template('post.html',post=post,user=user,
     form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
 @app.route('/logout',methods=['GET','POST'])
@@ -193,8 +199,33 @@ def center_person():
     tag_in.append(post.classname[0])
   fenleis=set(tag_in)
   return render_template('person_center.html',posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
-@app.route('/person/fenlei/<user_id>',methods=['GET','POST'])
-def fenleiperson(user_id):
-  post_fenlei=Classifa.query.filter_by(name='java').first()
-  print(post_fenlei.posts)
-  return render_template('person_center.html')
+@app.route('/person/<string:fenlei1>',methods=['GET','POST'])
+def person(fenlei1):
+  if not session.get('username'):
+    return redirect(url_for('login'))
+  user_id=User.query.filter_by(username=session.get('usernmae')).first()
+  post_fenlei=Post.query.filter_by(user_id=user_id).all()
+  classnmae=Classifa.query.filter_by(name=fenlei1).all()
+  tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
+  tag_in=[]
+  posts=Post.query.filter_by(user_id=user_id).all()
+  for post in posts:
+    tag_in.append(post.classname[0])
+  fenleis=set(tag_in)
+  fenlei_list=[]
+  for i in post_fenlei:
+    if i.classname==classnmae:
+      fenlei_list.append(i)
+    else:
+      continue
+  return render_template('gerenfenlei.html',fenlei_lists=fenlei_list,tuijian_posts=tuijian_posts,
+    fenleis=fenleis)
+@app.route('/tag/<string:tag>',methods=['GET','POST'])
+def tag(tag):
+  tags=Tag.query.filter_by(name=tag).first()
+  posts=tags.posts
+  link,tuijian_post,fenlei=get_tui_link()
+  return render_template('home.html',
+                           posts=posts,
+                           tuijian_post=tuijian_post,fenleis=fenlei,                
+                           links=link)

@@ -23,6 +23,6 @@ manager=Manager(app)
 babel=Babel(app)
 moment=Moment(app)
 manager.add_command('run',Server(use_debugger=True))
-app.permanent_session_lifetime=timedelta(minutes=5)
+app.permanent_session_lifetime=timedelta(minutes=10)
 if __name__ == '__main__':
 	manager.run()

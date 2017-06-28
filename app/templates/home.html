@@ -9,7 +9,7 @@
         <p> <a href="{{url_for('post',post_id=post.id)}}">详情</a></p> 
         <div style="padding: 5px 0;color: #999;font: normal 12px/24px Arial;text-align: right;">	
     <span class="glyphicon glyphicon-tag">标签 </span>
-    {%for tag in post.tag%}<strong>{{tag}}</strong> {%endfor%}
+    {%for tag in post.tag%}<a href="{{url_for('tag',tag=tag)}}"><strong>{{tag}}</strong></a> {%endfor%}
 	&nbsp;
     <span  style="margin: 0 5px 0 0;">&nbsp;日期： {{ moment(post.publish_date).format('LL') }}&nbsp;</span>
     <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-comment"><a href='{{url_for('post',post_id=post.id)}}'>&nbsp;评论&nbsp;</a></span>
