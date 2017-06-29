@@ -190,14 +190,15 @@ def new_post():
 def center_person():
   if not session.get('username'):
     return redirect(url_for('login'))
-  user_id=User.query.filter_by(username=session.get('usernmae')).first()
-  posts=Post.query.filter_by(user_id=user_id).all()
-  tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
+  user_id=User.query.filter_by(username=session.get('username')).first()
+  posts=Post.query.filter_by(user_id=user_id.id).all()
+  tuijian_posts = Post.query.filter_by(user_id=user_id.id,is_recomment=True).all()
   tag_in=[]
   for post in posts:
     tag_in.append(post.classname[0])
   fenleis=set(tag_in)
-  return render_template('person_center.html',posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
+  print(user_id.followed)
+  return render_template('person_center.html',username=user_id,posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
 @app.route('/person/<string:fenlei1>',methods=['GET','POST'])
 def person(fenlei1):
   if not session.get('username'):
@@ -278,7 +279,7 @@ def user(username):
   tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
   return render_template('user.html',username=username,posts=posts,tuijian_posts=tuijian_posts)
 @app.route('/editperson',methods=['GET','POST'])
-def editperson():
+def editperson():#这里目前需要对上传路径进行优化
   if not session.get('username'):
     return redirect('login')
   user=User.query.filter_by(username=session['username']).first()

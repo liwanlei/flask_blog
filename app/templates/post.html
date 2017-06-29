@@ -7,6 +7,11 @@
     {%endfor%}&nbsp;
     <p>&nbsp;</p>
 <p>
+{% if post.users.user_image%}
+<img src="{{post.users.user_image}}">
+{%else%}
+<img src="/static/img/0.jpg" style="height:70px;width:80px">
+{%endif%}
  <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<a href="{{url_for('user',username=user.username)}}">{{user.username}}</a>
 <span  style="margin: 0 5px 0 0;">&nbsp;于&nbsp;{{post.publish_date}}&nbsp;</span>发布
 &nbsp;&nbsp;
