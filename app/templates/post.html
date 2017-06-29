@@ -1,5 +1,13 @@
 {%extends 'base.html'%}
 {% block title %}{{post.title}}{% endblock %}
+ {%block nav%}
+ {%for nav in fenleis%}
+ <li >
+            <a href="{{url_for ('fenlei',fenlei_name=nav.name)}}" style="color: #0f0f0f">{{nav.name}}
+            </a>
+        </li>
+        {%endfor%}
+        {%endblock%}
 {% block body%}
 <h2><a href=""> {{post.title}}</a></h2>
 <p>{{post.text|safe}}</p>

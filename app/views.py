@@ -63,6 +63,7 @@ def reg():
 	return render_template('reg.html',form=form)
 @app.route('/post/<string:post_id>',methods=['GET','POST'])
 def post(post_id):
+  fenleis=db.session.query(Classifa).all()
   post=Post.query.filter_by(id=post_id).first()
   user=User.query.filter_by(id=Post.user_id).first()
   link,tuijian_post,fenlei=get_tui_link()
@@ -78,86 +79,26 @@ def post(post_id):
       add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
       db.session.add(add_comment)
       db.session.commit()
-      return render_template('post.html',post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
+      return render_template('post.html',fenleis=fenleis,post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
     except:
-      return render_template('post.html',post=post,user=user,
+      return render_template('post.html',fenleis=fenleis,post=post,user=user,
     form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
-  return render_template('post.html',post=post,user=user,
+  return render_template('post.html',post=post,user=user,fenleis=fenleis,
     form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
 @app.route('/logout',methods=['GET','POST'])
 def logout():
 	session.clear()
 	return redirect(url_for('home'))
-@app.route('/python',methods=['GET'])
-@app.route('/python/<int:page>')
-def python1(page=1):
-  pyth=Classifa.query.filter_by(name='python').first()
+@app.route('/fenlei/<string:fenlei_name>')
+def fenlei(fenlei_name):
+  pyth=Classifa.query.filter_by(name=fenlei_name).first()
   pyth_post=pyth.posts
   link,tuijian_post,fenlei=get_tui_link()
   return render_template('home.html',
                            posts=pyth_post,
                            tuijian_post=tuijian_post,fenleis=fenlei,                
                            links=link)
-@app.route('/java',methods=['GET'])
-@app.route('/java/<int:page>')
-def java1(page=1):
-  java=Classifa.query.filter_by(name='java').first()
-  java_post=java.posts
-  link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=java_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
-@app.route('/appium',methods=['GET'])
-@app.route('/appium/<int:page>')
-def appium1(page=1):
-  appium=Classifa.query.filter_by(name='appium').first()
-  appium_post=appium.posts
-  link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=appium_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
-@app.route('/selenium',methods=['GET'])
-@app.route('/selenium/<int:page>')
-def selenium1(page=1):
-  selenium=Classifa.query.filter_by(name='selenium').first()
-  selenium_post=selenium.posts
-  link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=selenium_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
-@app.route('/interface',methods=['GET'])
-@app.route('/interface/<int:page>')
-def interface1(page=1):
-  interface=Classifa.query.filter_by(name='接口').first()
-  interface_post=interface.posts
-  link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=interface_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
-@app.route('/jenkins',methods=['GET'])
-@app.route('/jenkins/<int:page>')
-def jenkins1(page=1):
-  jenkins=Classifa.query.filter_by(name='Jenkins').first()
-  jenkins_post=jenkins.posts
-  link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=jenkins_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
-@app.route('/data',methods=['GET'])
-@app.route('/data/<int:page>')
-def data1(page=1):
-  data=Classifa.query.filter_by(name='数据库').first()
-  data_post=data.posts
-  link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=data_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
+
 @app.route('/new_post',methods=['GET','POST'])
 def new_post():
   if not session.get('username'):
@@ -197,7 +138,6 @@ def center_person():
   for post in posts:
     tag_in.append(post.classname[0])
   fenleis=set(tag_in)
-  print(user_id.followed)
   return render_template('person_center.html',username=user_id,posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
 @app.route('/person/<string:fenlei1>',methods=['GET','POST'])
 def person(fenlei1):

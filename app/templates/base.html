@@ -20,39 +20,8 @@
                 <span class="glyphicon glyphicon-home"></span>
             </a>
         </li>
-        <li>
-            <a href="{{url_for ('python1')}}" style="color: #0f0f0f">python</a>
-        </li>
-        <li>
-            <a href="{{url_for ('selenium1')}}" style="color: #0f0f0f">selenium
-                <span class="badge"></span>
-            </a>
-        </li>
-            <li>
-            <a href="{{url_for ('appium1')}}" style="color: #0f0f0f">appium
-                <span class="badge"></span>
-            </a>
-        </li>
-            <li>
-            <a href="{{url_for ('interface1')}}" style="color: #0f0f0f">接口
-                <span class="badge"></span>
-            </a>
-        </li>
-             <li>
-            <a href="{{url_for ('jenkins1')}}" style="color: #0f0f0f">Jenkins
-                <span class="badge"></span>
-            </a>
-        </li>
-         <li>
-            <a href="{{url_for ('data1')}}" style="color: #0f0f0f">数据库
-                <span class="badge"></span>
-            </a>
-        </li>
-         <li>
-            <a href="{{url_for ('java1')}}" style="color: #0f0f0f">java
-                <span class="badge"></span>
-            </a>
-        </li>
+        {%block nav%}
+        {%endblock%}
             <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="搜索">
