@@ -1,2 +1,2 @@
-# flask_blog
-学习flask
+# 使用flask 实现blog
+# 目前实现注册，登录，评论，写博客，编辑资料等功能

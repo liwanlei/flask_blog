@@ -14,17 +14,17 @@ followers = db.Table('followers',
 post_class=db.Table('post_class',
     db.Column('post_id',db.Integer(),db.ForeignKey('posts.id')),
     db.Column('classifa_id',db.Integer(),db.ForeignKey('fenlei.id')))
-
 class User(db.Model):
     __tablename__='users'
     id=db.Column(db.Integer(),primary_key=True,autoincrement=True)
     username=db.Column(db.String(64),unique=True,index=True)
+    name=db.Column(db.String(64),default=username,nullable=True)
     password=db.Column(db.String(64),unique=True)
     user_regest_date = db.Column(db.DateTime(), default=datetime.datetime.now())
-    user_email=db.Column(db.String(64))
-    user_qq=db.Column(db.Integer())
+    user_email=db.Column(db.String(64),nullable=True)
+    user_qq=db.Column(db.Integer(),nullable=True)
     last_time_login=db.Column(db.DateTime(),default=datetime.datetime.now())
-    user_image=db.relationship('Image')
+    user_image=db.Column(db.String(252),nullable=True)
     posts = db.relationship(
         'Post',
         backref='users',
@@ -57,14 +57,6 @@ class User(db.Model):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
     def followed_posts(self):
         return  Post.query.join(followers,((followers.c.followed_id == Post.user_id).filter(followers.c.follower_id == self.id).order_by(Post.timestamp.desc())))
-class Image(db.Model):
-    __tablename__='user_image'
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    url = db.Column(db.String(512))
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
-    created_date = db.Column(db.DateTime(),default=datetime.datetime.now())
-    def __repr(self):
-        return '<Image %d %s>' % (self.id, self.url)
 class Post(db.Model):
     __tablename__='posts'
     id=db.Column(db.Integer(),primary_key=True,autoincrement=True)
@@ -92,7 +84,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     text = db.Column(db.Text())
     date = db.Column(db.DateTime(),default=datetime.datetime.now())
-    post_id = db.Column(db.Integer(), db.ForeignKey('posts.id'))
+    post_id =db.Column(db.Integer(), db.ForeignKey('posts.id'))
     user_id=db.Column(db.Integer(),db.ForeignKey('users.id'))
     def __repr__(self):
         return '<Model Comment `{}`>'.format(self.text)

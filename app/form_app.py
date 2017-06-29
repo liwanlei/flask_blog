@@ -2,7 +2,7 @@
 # @Date    : 2017-06-23 11:37:06
 # @Author  : lileilei
 from flask_wtf import Form
-from wtforms import PasswordField,StringField,TextAreaField,IntegerField,SubmitField,validators,DateTimeField,BooleanField,SelectMultipleField
+from wtforms import PasswordField,StringField,TextAreaField,IntegerField,SubmitField,validators,DateTimeField,BooleanField,SelectMultipleField,FileField
 from wtforms.validators import DataRequired
 from app.models import User
 class Baselogin(Form):
@@ -41,4 +41,9 @@ class PostForm(Form):
 	text = TextAreaField('正文',validators= [validators.DataRequired()])
 class CommentFrom(Form):
 	text=TextAreaField(u'评论',validators=[validators.length(min=1,message='请输入评论内容'),validators.DataRequired()],render_kw={'placeholder':u'请输入评论内容'})
-
+class EditPersonFrom(Form):
+	name=StringField('用户昵称',[validators.length(min=6, max=16,message='用户昵称有误'),validators.DataRequired()],render_kw={'placeholder':u'用户昵称'})
+	qq=IntegerField('qq',[validators.DataRequired()])
+	user_email=StringField('邮箱',[validators.length(min=4,max=20,message='邮箱错误'),validators.DataRequired()])
+	avatar=FileField('头像')
+	submit=SubmitField('保存修改')

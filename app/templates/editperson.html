@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <title>编辑资料</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="../static/css/bootstrap.min.css"></script>
+</head>
+<body background="../static/img/178.jpg" >
+<div class="col-md-9" style="margin-left:25%">
+<div class="row">
+  <h1 >个人资料</h1>
+  <form method="POST" action="" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.name.label }}
+      {% if form.name.errors %}
+        {% for e in form.name.errors %}
+          <p class="help-block">{{ e }}</p>
+        {% endfor %}
+      {% endif %}
+      {{ form.name}}
+    </div>
+    <div class="form-gruop">
+      {{ form.qq.label }}:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      {% if form.qq.errors %}
+        {% for e in form.qq.errors %}
+          <p class="help-block">{{ e }}</p>
+        {% endfor %}
+      {% endif %}
+      {{ form.qq }}
+    </div>
+    <div>&nbsp;&nbsp;</div>
+    <div class="form-gruop">
+      {{ form.user_email.label }}:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      {% if form.user_email.errors %}
+        {% for e in form.user_email.errors %}
+          <p class="help-block">{{ e }}</p>
+        {% endfor %}
+      {% endif %}
+      <span style="width: 20px">{{ form.user_email }}</span>
+    </div>
+    <div class="form-gruop">
+      {{ form.avatar.label }}
+      {% if form.avatar.errors %}
+        {% for e in form.avatar.errors %}
+          <p class="help-block">{{ e }}</p>
+        {% endfor %}
+      {% endif %}
+      {{ form.avatar }}
+    </div>
+    <div>&nbsp;&nbsp;</div>
+
+      <div class="form-gruop">{{ form.submit}} </div>
+  </form>
+</div>
+</div>
+
+</body>
+</html>

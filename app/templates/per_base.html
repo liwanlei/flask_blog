@@ -30,19 +30,17 @@
 			 {% endblock %}
         </div>
         <div class="col-md-3" style="margin-top: inherit">
+
+             <div>
+                <h3>个人资料</h3>
+                {% block fenlei %}
+                {% endblock %}
+            </div>
             <div>
                 <h3>推荐</h3>
                {% block tuijian %}
                 {% endblock %}
-
-            </div>
-            <div>
-                <h3>分类</h3>
-                {% block fenlei %}
-                {% endblock %}
-            </div>
-
-
+            </div>     
         </div>
     </div>
 

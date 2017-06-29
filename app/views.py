@@ -7,8 +7,9 @@
 from app import app,db
 from flask import render_template,redirect,flash,url_for,session,request
 from app.models import Post,Tag,User,Link,Comment,Classifa
-from app.form_app import Baselogin,Basereg,CommentFrom,PostForm
-import datetime
+from conf.loadconfig import lod_config
+from app.form_app import Baselogin,Basereg,CommentFrom,PostForm,EditPersonFrom
+import datetime,os
 def get_tui_link():
   link=db.session.query(Link).all()
   fenlei=db.session.query(Classifa).all()
@@ -51,7 +52,7 @@ def reg():
 			else:
 				try:
 					password=form.password.data
-					add_user=User(username=user,
+					add_user=User(username=user,name=user,
 					user_regest_date=datetime.datetime.now())
 					add_user.set_password(password=password)
 					db.session.add(add_user)
@@ -67,7 +68,7 @@ def post(post_id):
   link,tuijian_post,fenlei=get_tui_link()
   comment=Comment.query.filter_by(post_id=post.id).all()
   form=CommentFrom()
-  if form.validate_on_submit:
+  if form.validate_on_submit():
     try:
       user_comment=session['username']
       user_id=User.query.filter_by(username=user_comment).first().id
@@ -263,3 +264,44 @@ def edit(post_id):
     form.title.data=post.title
     form.text.data=post.text
     return render_template('edit.html',form=form,tags=tags,fenleis=fenleis)
+@app.route('/user/<string:username>',methods=['GET','POST'])
+def user(username):
+  if session.get('username'):
+    if username==session['username']:
+      return redirect(url_for('center_person'))
+    user_id=User.query.filter_by(username=username).first()
+    posts=Post.query.filter_by(user_id=user_id).all()
+    tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
+    return render_template('user.html',username=username,posts=posts,tuijian_posts=tuijian_posts)
+  user_id=User.query.filter_by(username=username).first().id
+  posts=Post.query.filter_by(user_id=user_id).all()
+  tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
+  return render_template('user.html',username=username,posts=posts,tuijian_posts=tuijian_posts)
+@app.route('/editperson',methods=['GET','POST'])
+def editperson():
+  if not session.get('username'):
+    return redirect('login')
+  user=User.query.filter_by(username=session['username']).first()
+  form=EditPersonFrom()
+  if form.validate_on_submit():
+    user.name=form.name.data
+    user.user_email=form.user_email.data
+    user.user_qq=form.qq.data
+    avatar=request.files['avatar']
+    fanme=avatar.filename
+    upfile='..\static\\avatar\\'
+    ALLOWER_EXIT=['pang','jpg','jpeg','jig']
+    flag='.' in fanme and fanme.split('.')[1] in ALLOWER_EXIT
+    if not flag:
+      flash('头像格式不支持')
+      return render_template('editperson.html',form=form)
+    avatar.save('{}{}{}'.format(upfile,user.username,fanme))
+    user.user_image='/static/avatar/{}{}'.format(user.username,fanme)
+    db.session.add(user)
+    db.session.commit()
+    flash('资料更新成功')
+    return redirect(url_for('center_person'))
+  form.qq.data=user.user_qq
+  form.user_email.data=user.user_email
+  form.name.data=user.name
+  return render_template('editperson.html',form=form)

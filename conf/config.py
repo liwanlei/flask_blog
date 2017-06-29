@@ -11,6 +11,7 @@ class devconfig:
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     CSRF_ENABLED = True
     DEBUG = True
+    UPLOAD_FOLDER='../app/static/acatar/'
     @staticmethod
     def init_app(app):
         pass
@@ -22,6 +23,7 @@ class testconfig:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     CSRF_ENABLED = True
     DEBUG = True
+    UPLOAD_FOLDER='../app/static/acatar/'
     @staticmethod
     def init_app(app):
         pass
@@ -31,6 +33,7 @@ class ProductionConfig:
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "Production.db")
     SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    UPLOAD_FOLDER='../app/static/acatar/'
     CSRF_ENABLED = True
     DEBUG = True
     @staticmethod

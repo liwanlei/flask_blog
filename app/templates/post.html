@@ -7,7 +7,7 @@
     {%endfor%}&nbsp;
     <p>&nbsp;</p>
 <p>
- <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<a>{{user.username}}</a>
+ <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<a href="{{url_for('user',username=user.username)}}">{{user.username}}</a>
 <span  style="margin: 0 5px 0 0;">&nbsp;于&nbsp;{{post.publish_date}}&nbsp;</span>发布
 &nbsp;&nbsp;
 <a href='{{ url_for('edit',post_id=post.id) }}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-pencil"></span>&nbsp;编辑</a>&nbsp;
@@ -18,9 +18,9 @@
   <form method="POST" action="{{ url_for('post', post_id=post.id)
     }}">  
     {{ form.hidden_tag() }}
-    <p>  作者:<a >
+    <p>  作者:
       {{ session.username }}
-        </a>
+        
     </p>
     <p class="form-group">
       {{ form.text.label }}
@@ -48,7 +48,7 @@
       <h4>----------------------------</h4>
       {% for comment in comments %}
           <div style="padding: 9px;word-wrap : break-word ;">
-               <h5>评论者：<a href="">{{comment.users}}</a>  时间：{{ comment.date  }} </h5>
+               <h5>评论者：<a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>  时间：{{ comment.date  }} </h5>
           <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </div>
       {% endfor %}

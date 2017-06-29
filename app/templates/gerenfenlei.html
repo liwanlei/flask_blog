@@ -26,8 +26,3 @@
 	<p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></P>
 	{%endfor%}
 {% endblock %}
-{%block fenlei%}
-{%for fenlei in fenleis%}
-<p><a href="{{url_for('person',fenlei1=fenlei)}}">{{fenlei}}</a></P>
-{%endfor%}
-{%endblock%}

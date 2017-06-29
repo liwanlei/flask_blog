@@ -5,7 +5,6 @@
    <title>{% block title %}Home{% endblock %}</title>
     {{ moment.include_jquery() }}
         {{ moment.include_moment() }}
-
         <!--使用中文,默认是英语的-->
 　　   {{ moment.lang("zh-CN") }}
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -54,7 +53,6 @@
                 <span class="badge"></span>
             </a>
         </li>
-
             <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="搜索">
@@ -63,7 +61,6 @@
         </form>
             {% if session.username %}
             <li >
-
                 <a href="{{url_for('center_person')}}">欢迎{{ session.username }}</a></li>
                 <li>
                  <a href="{{ url_for ('logout')}}">退出</a>
@@ -85,12 +82,10 @@
             {% endblock %}
         </div>
         <div class="col-md-3" style="margin-top: inherit">
-
             <div>
                 <h3>推荐排行</h3>
                   {% block tuijian %}
                 {% endblock %}
-
             </div>
             <div>
                 <h3>链接</h3>
@@ -103,6 +98,4 @@
 </div>
     {%block js %}
     {%endblock%}
-
-
 </body>
