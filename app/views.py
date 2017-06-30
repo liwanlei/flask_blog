@@ -73,19 +73,15 @@ def post(post_id):
   comment=Comment.query.filter_by(post_id=post.id).all()
   form=CommentFrom()
   if form.validate_on_submit():
-    try:
-      user_comment=session['username']
-      user_id=User.query.filter_by(username=user_comment).first().id
-      comment_ip=request.remote_addr
-      text_comment=form.text.data
-      date_now=datetime.datetime.now()
-      add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
-      db.session.add(add_comment)
-      db.session.commit()
-      return render_template('post.html',fenleis=fenleis,post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
-    except:
-      return render_template('post.html',fenleis=fenleis,post=post,user=user,
-    form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
+    user_comment=session['username']
+    user_id=User.query.filter_by(username=user_comment).first().id
+    comment_ip=request.remote_addr
+    text_comment=form.text.data
+    date_now=datetime.datetime.now()
+    add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
+    db.session.add(add_comment)
+    db.session.commit()
+    return render_template('post.html',fenleis=fenleis,post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
   return render_template('post.html',post=post,user=user,fenleis=fenleis,
     form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
 @app.route('/logout',methods=['GET','POST'])
@@ -227,7 +223,7 @@ def editperson():#这里目前需要对上传路径进行优化
     user.user_qq=form.qq.data
     avatar=request.files['avatar']
     fanme=avatar.filename
-    upfile='..\static\\avatar\\'
+    upfile=os.getcwd()+('/app/static/avatar/')
     ALLOWER_EXIT=['pang','jpg','jpeg','jig']
     flag='.' in fanme and fanme.split('.')[1] in ALLOWER_EXIT
     if not flag:

@@ -23,6 +23,7 @@
         {%block nav%}
         {%endblock%}
             {% if session.username %}
+            
             <li style="margin-left:5%">
                 <a href="{{url_for('center_person')}}">欢迎{{ session.username }}</a></li>
                 <li>
