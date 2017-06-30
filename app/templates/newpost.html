@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   <title>{% block title %}写文章{% endblock %}</title>
+   <title>{% block title %}写文章{% endblock %}</title> 
    <link rel="icon" href="../static/img/0.jpg" type="image/x-icon" />
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="../static/css/bootstrap.min.css"></script>
@@ -10,7 +10,8 @@
 <body background="../static/img/178.jpg" >
 <div class="col-md-9" style="margin-left:10%">
 <div class="row">
-  <h1 >写文章</h1>
+<span ><a href="{{url_for('center_person')}}">返回个人中心</a></span>
+  <h1 >写文章</h1> 
   <form method="POST" action="{{ url_for('new_post') }}">
     {{ form.hidden_tag() }}
     <div class="form-group">

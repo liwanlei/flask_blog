@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Date    : 2017-06-22 20:22:48
 # @Author  : lileilei
-from app import db
+from app import db,app
 import datetime
 from werkzeug.security import check_password_hash,generate_password_hash
 posts_tags = db.Table('posts_tags',
@@ -57,6 +57,14 @@ class User(db.Model):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
     def followed_posts(self):
         return  Post.query.join(followers,((followers.c.followed_id == Post.user_id).filter(followers.c.follower_id == self.id).order_by(Post.timestamp.desc())))
+    def is_authenticated(self):
+        return True
+    def is_active(self): 
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return self.id
 class Post(db.Model):
     __tablename__='posts'
     id=db.Column(db.Integer(),primary_key=True,autoincrement=True)

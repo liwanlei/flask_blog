@@ -9,7 +9,7 @@
 <body background="../static/img/178.jpg" >
 <div class="col-md-9" style="margin-left:10%">
 <div class="row">
-  <h1 >编辑中心</h1>
+  <h1 >编辑中心</h1><span><a href="{{url_for('center_person')}}">返回个人中心</a></span>
   <form method="POST" action="">
     {{ form.hidden_tag() }}
     <div class="form-group">

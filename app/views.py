@@ -5,6 +5,7 @@
 # @File    : views.py
 # @Software: PyCharm
 from app import app,db
+from flask_login import login_required,login_user
 from flask import render_template,redirect,flash,url_for,session,request
 from app.models import Post,Tag,User,Link,Comment,Classifa
 from conf.loadconfig import lod_config
@@ -34,6 +35,7 @@ def login():
 		user=User.query.filter_by(username=form.username.data).first()
 		check=user.check_password(form.password.data)
 		if check==True:
+			login_user(user)
 			session['username']=form.username.data
 			return redirect(url_for('home'))
 		return render_template('login.html',form=form)
@@ -100,9 +102,8 @@ def fenlei(fenlei_name):
                            tuijian_post=tuijian_post,fenleis=fenlei,                
                            links=link)
 @app.route('/new_post',methods=['GET','POST'])
+@login_required
 def new_post():
-  if not session.get('username'):
-    return  redirect(url_for('login'))
   tags=db.session.query(Tag).all()
   fenlei=db.session.query(Classifa).all()
   form = PostForm()
@@ -128,9 +129,8 @@ def new_post():
       return  redirect(url_for('home'))
   return render_template('newpost.html',tags=tags,fenleis=fenlei,form=form)
 @app.route('/person',methods=['GET','POST'])
+@login_required
 def center_person():
-  if not session.get('username'):
-    return redirect(url_for('login'))
   user_id=User.query.filter_by(username=session.get('username')).first()
   posts=Post.query.filter_by(user_id=user_id.id).all()
   tuijian_posts = Post.query.filter_by(user_id=user_id.id,is_recomment=True).all()
@@ -140,9 +140,8 @@ def center_person():
   fenleis=set(tag_in)
   return render_template('person_center.html',username=user_id,posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
 @app.route('/person/<string:fenlei1>',methods=['GET','POST'])
+@login_required
 def person(fenlei1):
-  if not session.get('username'):
-    return redirect(url_for('login'))
   user_id=User.query.filter_by(username=session.get('usernmae')).first()
   post_fenlei=Post.query.filter_by(user_id=user_id).all()
   classnmae=Classifa.query.filter_by(name=fenlei1).all()
@@ -170,9 +169,8 @@ def tag(tag):
                            tuijian_post=tuijian_post,fenleis=fenlei,                
                            links=link)
 @app.route('/edit/<string:post_id>',methods=['GET',"POST"])
+@login_required
 def edit(post_id):
-    if not session.get('username'):
-        return redirect(url_for('login'))
     post=Post.query.filter_by(id=post_id).first()
     form=PostForm()
     tags = db.session.query(Tag).all()
@@ -219,9 +217,8 @@ def user(username):
   tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
   return render_template('user.html',username=username,posts=posts,tuijian_posts=tuijian_posts)
 @app.route('/editperson',methods=['GET','POST'])
+@login_required
 def editperson():#这里目前需要对上传路径进行优化
-  if not session.get('username'):
-    return redirect('login')
   user=User.query.filter_by(username=session['username']).first()
   form=EditPersonFrom()
   if form.validate_on_submit():

@@ -3,6 +3,8 @@
 # @Author  : lileilei
 from flask_script import Manager,Server
 from  app import app,db
+from app.models import User
+from flask_login import LoginManager
 from  datetime import  timedelta
 from flask_admin import Admin,AdminIndexView
 from common.admin_view import UserView,LinkView,CommentView,PostView,TagView,ClassView
@@ -21,6 +23,13 @@ flask_admin.add_view(TagView(db.session,name='标签'))
 flask_admin.add_view(ClassView(db.session,name='分类'))
 manager=Manager(app)
 moment=Moment(app)
+loginManager=LoginManager(app)
+loginManager.session_protection='strong'
+loginManager.login_view='login'
+loginManager.init_app(app)
+@loginManager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 manager.add_command('run',Server(use_debugger=True))
 app.permanent_session_lifetime=timedelta(minutes=50)
 if __name__ == '__main__':

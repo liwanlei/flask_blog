@@ -9,15 +9,8 @@
 <body background="../static/img/178.jpg" >
 <div class="col-md-9" style="margin-left:25%">
 <div class="row">
-  <h1 >个人资料</h1>
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <p class=flashes>
-    {% for message in messages %}
-      <p style="color:#F00">{{ message }}</p>
-    {% endfor %}</p>
-  {% endif %}
-{% endwith %}
+  <h1 >个人资料</h1><span><a href="{{url_for('center_person')}}">返回个人中心</a></span>
+  
   <form method="POST" action="" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <div class="form-group">
