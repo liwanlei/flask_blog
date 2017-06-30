@@ -10,6 +10,7 @@ from app.models import Post,Tag,User,Link,Comment,Classifa
 from conf.loadconfig import lod_config
 from app.form_app import Baselogin,Basereg,CommentFrom,PostForm,EditPersonFrom
 import datetime,os
+from common.yanzhengma import generate_verification_code
 def get_tui_link():
   link=db.session.query(Link).all()
   fenlei=db.session.query(Classifa).all()
@@ -98,7 +99,6 @@ def fenlei(fenlei_name):
                            posts=pyth_post,
                            tuijian_post=tuijian_post,fenleis=fenlei,                
                            links=link)
-
 @app.route('/new_post',methods=['GET','POST'])
 def new_post():
   if not session.get('username'):
@@ -246,3 +246,9 @@ def editperson():#这里目前需要对上传路径进行优化
   form.user_email.data=user.user_email
   form.name.data=user.name
   return render_template('editperson.html',form=form)
+@app.errorhandler(404)
+def page_not_found(e):
+  return render_template('404.html'),404
+@app.errorhandler(505)
+def page_not_found(e):
+  return render_template('505.html'),505

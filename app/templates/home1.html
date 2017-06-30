@@ -26,16 +26,12 @@
     {% endfor %}
 <div class="pagination" >
 {{ macros.pagination_widget(pagination,'.home') }}
-</div>
-            {% endblock %}
-
-
+</div>        {% endblock %}
 {% block tuijian %}
 	{%for tui in tuijian_post%}
 	<p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></P>
 	{%endfor%}
         {% endblock %}
-
 {%block link%}
 {%for link1 in links%}
 <p><a href='{{link1.url}}'>{{link1.name}}</a></P>

@@ -1,8 +1,6 @@
 {%extends 'per_base.html'%}
 {%block title%}个人中心{% endblock %}
  {% block content %}
-
-
      {% for post in fenlei_lists %}
      <div style="height:10%">
       <h3><a href="{{url_for('post',post_id=post.id)}}">{{ post.title }}</a></h3>
@@ -18,11 +16,7 @@
 	</div>
     {% endfor %}
 			 {% endblock %}
-
-
-{% block tuijian %}
-
-    {%for tui in tuijian_posts%}
+{% block tuijian %}   {%for tui in tuijian_posts%}
 	<p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></P>
 	{%endfor%}
 {% endblock %}

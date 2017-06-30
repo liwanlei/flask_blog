@@ -23,17 +23,12 @@
     <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-comment"><a href='{{url_for('post',post_id=post.id)}}'>&nbsp;评论&nbsp;</a></span>
     <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-eye-open"><a href='{{url_for('post',post_id=post.id)}}'>&nbsp;阅读&nbsp;</a></span></div>
 	</div>
-    {% endfor %}
-
-            {% endblock %}
-
-
+    {% endfor %}     {% endblock %}
 {% block tuijian %}
 	{%for tui in tuijian_post%}
 	<p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></P>
 	{%endfor%}
         {% endblock %}
-
 {%block link%}
 {%for link1 in links%}
 <p><a href='{{link1.url}}'>{{link1.name}}</a></P>

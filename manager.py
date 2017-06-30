@@ -4,13 +4,15 @@
 from flask_script import Manager,Server
 from  app import app,db
 from  datetime import  timedelta
-import logging
 from flask_admin import Admin,AdminIndexView
 from common.admin_view import UserView,LinkView,CommentView,PostView,TagView,ClassView
 from flask_admin.contrib.sqla import  ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_moment import Moment
-flask_admin = Admin(app,name=u'后台管理系统')
+flask_admin = Admin(app,name=u'后台管理系统',index_view=AdminIndexView(
+        name='导航栏',
+        url='/wodeguanliyuan'
+    ))
 flask_admin.add_view(UserView(db.session,name='用户'))
 flask_admin.add_view(LinkView(db.session, name='链接'))
 flask_admin.add_view(CommentView(db.session,name='评论'))
@@ -20,6 +22,6 @@ flask_admin.add_view(ClassView(db.session,name='分类'))
 manager=Manager(app)
 moment=Moment(app)
 manager.add_command('run',Server(use_debugger=True))
-app.permanent_session_lifetime=timedelta(minutes=10)
+app.permanent_session_lifetime=timedelta(minutes=50)
 if __name__ == '__main__':
 	manager.run()
