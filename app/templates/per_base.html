@@ -19,9 +19,9 @@
         <li>
             <a href="{{url_for('center_person')}}" style="color: #0f0f0f">首页</a>
         </li>
-            <li><a href="{{url_for('new_post')}}" style="color: #0f0f0f">新随笔</a></li>
+            <li>
+            <a href="{{url_for('new_post')}}" style="color: #0f0f0f">新随笔</a></li>
     </ul>
-
 </div>
 <div class="container" style="margin-top: inherit">
     <div class="row">
@@ -30,7 +30,6 @@
 			 {% endblock %}
         </div>
         <div class="col-md-3" style="margin-top: inherit">
-
              <div>
                 <h3>个人资料</h3>
                 {% block fenlei %}
@@ -43,8 +42,6 @@
             </div>     
         </div>
     </div>
-
 </div>
-
 </body>
 </html>

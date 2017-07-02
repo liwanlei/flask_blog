@@ -12,18 +12,16 @@
 	<script src="../static/css/bootstrap.min.css"></script>
 </head>
 <body background="../static/img/178.jpg">
-
 <div style="margin-left: 17%;margin-top: 15px;text-align: center">
         <ul class="nav nav-pills" >
-        <li >
-            <a href="{{url_for ('home')}}" style="color: #0f0f0f">首页
+        <li id="beiji">
+            <a href="{{url_for ('home')}}" style="color: #0f0f0f"  >首页
                 <span class="glyphicon glyphicon-home"></span>
             </a>
         </li>
         {%block nav%}
         {%endblock%}
             {% if session.username %}
-            
             <li style="margin-left:5%">
                 <a href="{{url_for('center_person')}}">欢迎{{ session.username }}</a></li>
                 <li>
