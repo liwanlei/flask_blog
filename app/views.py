@@ -23,11 +23,9 @@ def home(page=1):
 	pagination=Post.query.order_by(Post.publish_date.desc()).paginate(page, per_page=10,error_out=False)
 	posts = pagination.items
 	link,tuijian_post,fenlei=get_tui_link()
-	return render_template('home1.html',
-                           posts=posts,
-                           pagination=pagination,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
+	return render_template('home1.html',posts=posts,pagination=pagination,
+    tuijian_post=tuijian_post,fenleis=fenlei,                
+    links=link)
 @app.route('/login',methods=['GET','POST'])
 def login():
 	form=Baselogin()
@@ -91,14 +89,12 @@ def logout():
 	session.clear()
 	return redirect(url_for('home'))
 @app.route('/fenlei/<string:fenlei_name>')
-def fenlei(fenlei_name):
+@app.route('/fenlei/<string:fenlei_name>&<int:page>')
+def fenlei(fenlei_name,page=1):
   pyth=Classifa.query.filter_by(name=fenlei_name).first()
   pyth_post=pyth.posts
   link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=pyth_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
-                           links=link)
+  return render_template('home.html',posts=pyth_post,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
 @app.route('/new_post',methods=['GET','POST'])
 @login_required
 def new_post():
