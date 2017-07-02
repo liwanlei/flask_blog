@@ -76,6 +76,8 @@ def post(post_id):
     user_comment=session['username']
     user_id=User.query.filter_by(username=user_comment).first().id
     comment_ip=request.remote_addr
+    if form.text.data is None:
+      return render_template('post.html',fenleis=fenleis,post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
     text_comment=form.text.data
     date_now=datetime.datetime.now()
     add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
@@ -227,13 +229,11 @@ def editperson():#这里目前需要对上传路径进行优化
     ALLOWER_EXIT=['pang','jpg','jpeg','jig']
     flag='.' in fanme and fanme.split('.')[1] in ALLOWER_EXIT
     if not flag:
-      flash('头像格式不支持')
       return render_template('editperson.html',form=form)
     avatar.save('{}{}{}'.format(upfile,user.username,fanme))
     user.user_image='/static/avatar/{}{}'.format(user.username,fanme)
     db.session.add(user)
     db.session.commit()
-    flash('资料更新成功')
     return redirect(url_for('center_person'))
   form.qq.data=user.user_qq
   form.user_email.data=user.user_email
