@@ -93,8 +93,12 @@ def logout():
 def fenlei(fenlei_name,page=1):
   pyth=Classifa.query.filter_by(name=fenlei_name).first()
   pyth_post=pyth.posts
+  from common.fenye import list_qiepian
+  page1=list_qiepian(pyth_post,10)
+  pages=range(1,len(page1)+1)
+  pyth_post1=page1[int(page)-1]
   link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',posts=pyth_post,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
+  return render_template('home.html',posts=pyth_post1,pages=pages,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
 @app.route('/new_post',methods=['GET','POST'])
 @login_required
 def new_post():

@@ -9,7 +9,6 @@
         {%endfor%}
         {%endblock%}
 {% block body%}
-{% import "mac.html" as macros %}
 {% for post in posts %}
       <div style="height:10%">        
       <h3><a href="{{url_for('post',post_id=post.id)}}">{{ post.title }}</a></h3>
@@ -24,6 +23,11 @@
     <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-eye-open"><a href='{{url_for('post',post_id=post.id)}}'>&nbsp;阅读&nbsp;</a></span></div>
 	</div>
     {% endfor %}
+    {%for page in pages%}
+    <ul class="pagination">
+<li> <a id='{{page}}' onclick="h=window.location.href.split('&')[0],m=document.getElementById({{page}}),m.setAttribute('href',h+'&'+{{page}})" style='background-color: lightgoldenrodyellow;color: brown;'>{{page}}</a></li>
+</ul>
+{%endfor%}
     {% endblock %}
 {% block tuijian %}
 	{%for tui in tuijian_post%}

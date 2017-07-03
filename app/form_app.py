@@ -47,3 +47,4 @@ class EditPersonFrom(Form):
 	user_email=StringField('邮箱',[validators.length(min=4,max=20,message='邮箱错误'),validators.DataRequired()])
 	avatar=FileField('头像')
 	submit=SubmitField('保存修改')
+

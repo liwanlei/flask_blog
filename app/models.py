@@ -68,7 +68,7 @@ class User(db.Model):
 class Post(db.Model):
     __tablename__='posts'
     id=db.Column(db.Integer(),primary_key=True,autoincrement=True)
-    title=db.Column(db.String(255),unique=True)
+    title=db.Column(db.String(255),unique=False)
     text=db.Column(db.Text())
     publish_date=db.Column(db.DateTime(),default=datetime.datetime.now())
     user_id=db.Column(db.Integer(),db.ForeignKey('users.id'))
@@ -94,8 +94,10 @@ class Comment(db.Model):
     date = db.Column(db.DateTime(),default=datetime.datetime.now())
     post_id =db.Column(db.Integer(), db.ForeignKey('posts.id'))
     user_id=db.Column(db.Integer(),db.ForeignKey('users.id'))
+    pid=db.Column(db.Integer(),db.ForeignKey('comments.id'))
     def __repr__(self):
         return '<Model Comment `{}`>'.format(self.text)
+comment=db.relationship('Comment',backref='comment_id',lazy='dynamic', uselist=False)
 class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer(), primary_key=True)
