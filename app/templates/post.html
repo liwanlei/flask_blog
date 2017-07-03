@@ -28,7 +28,7 @@
     }}">  
     {{ form.hidden_tag() }}
     <p>  作者:
-      {{ session.username }}
+      <a href="{{ url_for('center_person') }}">{{ session.username }}</a>
         
     </p>
     <p class="form-group">

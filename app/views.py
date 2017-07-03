@@ -12,6 +12,7 @@ from conf.loadconfig import lod_config
 from app.form_app import Baselogin,Basereg,CommentFrom,PostForm,EditPersonFrom
 import datetime,os
 from common.yanzhengma import generate_verification_code
+from common.fenye import list_qiepian
 def get_tui_link():
   link=db.session.query(Link).all()
   fenlei=db.session.query(Classifa).all()
@@ -93,7 +94,6 @@ def logout():
 def fenlei(fenlei_name,page=1):
   pyth=Classifa.query.filter_by(name=fenlei_name).first()
   pyth_post=pyth.posts
-  from common.fenye import list_qiepian
   page1=list_qiepian(pyth_post,10)
   pages=range(1,len(page1)+1)
   pyth_post1=page1[int(page)-1]
@@ -158,13 +158,14 @@ def person(fenlei1):
   return render_template('gerenfenlei.html',fenlei_lists=fenlei_list,tuijian_posts=tuijian_posts,
     fenleis=fenleis)
 @app.route('/tag/<string:tag>',methods=['GET','POST'])
-def tag(tag):
+@app.route('/tag/<string:tag>&<int:page>')
+def tag(tag,page=1):
   tags=Tag.query.filter_by(name=tag).first()
   posts=tags.posts
   link,tuijian_post,fenlei=get_tui_link()
   return render_template('home.html',
                            posts=posts,
-                           tuijian_post=tuijian_post,fenleis=fenlei,                
+                           tuijian_post=tuijian_post,fenleis=fenlei,
                            links=link)
 @app.route('/edit/<string:post_id>',methods=['GET',"POST"])
 @login_required
