@@ -76,13 +76,14 @@ def post(post_id):
     user_id=User.query.filter_by(username=user_comment).first().id
     comment_ip=request.remote_addr
     if form.text.data is None:
+      flash('评论失败')
       return render_template('post.html',fenleis=fenleis,post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
     text_comment=form.text.data
     date_now=datetime.datetime.now()
     add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
     db.session.add(add_comment)
     db.session.commit()
-    return render_template('post.html',fenleis=fenleis,post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
+    return redirect(url_for('post',post_id=post_id))
   return render_template('post.html',post=post,user=user,fenleis=fenleis,
     form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
 @app.route('/logout',methods=['GET','POST'])
@@ -255,3 +256,20 @@ def serch():
     return render_template('serach.html',error=error,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
   posts=data[:40]
   return render_template('serach.html',posts=posts,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
+@app.route('/re_comment/<int:post_id>&<int:comment_id>',methods=['POST','GET'])
+@login_required
+def re_comment(post_id,comment_id):
+  user_comment=session['username']
+  user_id=User.query.filter_by(username=user_comment).first()
+  link,tuijian_post,fenlei=get_tui_link()
+  post=Post.query.filter_by(id=post_id).first()
+  comment=Comment.query.filter_by(post_id=post_id).all()
+  comenet_neirong=request.form.get('beijing')
+  form=CommentFrom()
+  if comenet_neirong is None:
+    flash('回复失败')
+    return render_template('post.html',post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post,fenleis=fenlei)
+  new_re_comment=Comment(text=comenet_neirong,pid=comment_id,post_id=post_id,user_id=user_id.id)
+  db.session.add(new_re_comment)
+  db.session.commit()
+  return redirect(url_for('post',post_id=post_id))
