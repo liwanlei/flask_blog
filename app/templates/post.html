@@ -11,7 +11,7 @@
 {% block body%}
 <h2><a href=""> {{post.title}}</a></h2>
 <p>{{post.text|safe}}</p>
-    <span class="glyphicon glyphicon-tag">标签</span> {%for tag in post.tag%}<a href='#'>{{tag}}</a>
+    <span class="glyphicon glyphicon-tag">标签</span> {%for tag in post.tag%}<a href='{{url_for('tag',tag=tag)}}'>{{tag}}</a>
     {%endfor%}&nbsp;
     <p>&nbsp;</p>
 <p>

@@ -11,7 +11,7 @@
 	<script src="../static/js/jquery-2.1.4.min.js"></script>
 	<script src="../static/css/bootstrap.min.css"></script>
 </head>
-<body background="../static/img/178.jpg">
+<body background="../static/img/178.jpg" style="background-size:cover">
 <div style="margin-left: 17%;margin-top: 15px;text-align: center">
         <ul class="nav nav-pills" >
         <li id="beiji">
@@ -21,6 +21,11 @@
         </li>
         {%block nav%}
         {%endblock%}
+       <li>
+                <form role="form" >
+                    <input type="text" name="serch" value='请输入搜索内容' class="form-control" >
+                </form>
+            </li>
             {% if session.username %}
             <li style="margin-left:5%">
                 <a href="{{url_for('center_person')}}">欢迎{{ session.username }}</a></li>

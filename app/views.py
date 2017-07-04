@@ -161,10 +161,10 @@ def person(fenlei1):
 @app.route('/tag/<string:tag>&<int:page>')
 def tag(tag,page=1):
   tags=Tag.query.filter_by(name=tag).first()
-  posts=tags.posts
+  pyth_post=tags.posts
   link,tuijian_post,fenlei=get_tui_link()
   return render_template('home.html',
-                           posts=posts,
+                           posts=pyth_post,
                            tuijian_post=tuijian_post,fenleis=fenlei,
                            links=link)
 @app.route('/edit/<string:post_id>',methods=['GET',"POST"])
