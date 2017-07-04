@@ -163,10 +163,7 @@ def tag(tag,page=1):
   tags=Tag.query.filter_by(name=tag).first()
   pyth_post=tags.posts
   link,tuijian_post,fenlei=get_tui_link()
-  return render_template('home.html',
-                           posts=pyth_post,
-                           tuijian_post=tuijian_post,fenleis=fenlei,
-                           links=link)
+  return render_template('tag.html',posts=pyth_post,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
 @app.route('/edit/<string:post_id>',methods=['GET',"POST"])
 @login_required
 def edit(post_id):
@@ -246,3 +243,15 @@ def page_not_found(e):
 @app.errorhandler(505)
 def page_not_found(e):
   return render_template('505.html'),505
+@app.route('/serach',methods=['GET','POST'])
+def serch():
+  link,tuijian_post,fenlei=get_tui_link()
+  serch=request.form.get('text')
+  if serch =='':
+    return redirect(url_for('home'))
+  data=Post.query.filter(Post.title.like('%'+serch+'%')).all()
+  if len(data) <=0:
+    error='找不到你要搜索的内容'
+    return render_template('serach.html',error=error,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
+  posts=data[:40]
+  return render_template('serach.html',posts=posts,tuijian_post=tuijian_post,fenleis=fenlei,links=link)

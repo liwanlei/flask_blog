@@ -9,8 +9,7 @@ posts_tags = db.Table('posts_tags',
     db.Column('tag_id', db.Integer(), db.ForeignKey('tags.id')))
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer(), db.ForeignKey('users.id')),
-    db.Column('followed_id', db.Integer(), db.ForeignKey('users.id'))
-)
+    db.Column('followed_id', db.Integer(), db.ForeignKey('users.id')))
 post_class=db.Table('post_class',
     db.Column('post_id',db.Integer(),db.ForeignKey('posts.id')),
     db.Column('classifa_id',db.Integer(),db.ForeignKey('fenlei.id')))
@@ -22,7 +21,7 @@ class User(db.Model):
     password=db.Column(db.String(64),unique=True)
     user_regest_date = db.Column(db.DateTime(), default=datetime.datetime.now())
     user_email=db.Column(db.String(64),nullable=True)
-    user_qq=db.Column(db.Integer(),nullable=True)
+    user_qq=db.Column(db.Integer(),nullable=True,unique=True)
     last_time_login=db.Column(db.DateTime(),default=datetime.datetime.now())
     user_image=db.Column(db.String(252),nullable=True)
     posts = db.relationship(

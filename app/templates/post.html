@@ -38,7 +38,7 @@
           <p class="help-block">{{ e }}</p>
         {% endfor %}
       {% endif %}
-      {{ form.text(class_='text' ,id='newName')|safe }}
+      {{ form.text(class_='tex' ,id='newName')|safe }}
     </p>
     <input class="btn btn-primary" type="submit" value="评论" >
     {% with messages = get_flashed_messages() %}
@@ -58,7 +58,7 @@
       {% for comment in comments %}
        
           <div style="padding: 9px;word-wrap : break-word ;">
-               <h5>评论者：<a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>  时间：{{ comment.date  }} </h5>
+               <h5>评论者：<a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>  时间：{{ moment(comment.date).fromNow(refresh=True)   }}</h5> 
           <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </div>
       {% endfor %}
@@ -77,5 +77,5 @@
     
 <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
 <script>
-    CKEDITOR.replace('text');
+    CKEDITOR.replace('newName');
 </script>{%endblock%}

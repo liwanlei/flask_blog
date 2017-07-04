@@ -21,11 +21,13 @@
         </li>
         {%block nav%}
         {%endblock%}
-       <li>
-                <form role="form" >
-                    <input type="text" name="serch" value='请输入搜索内容' class="form-control" >
-                </form>
-            </li>
+       <form class="navbar-form navbar-left" role="search" method="POST" action="{{ url_for('serch')
+    }}">
+            <div class="form-group">
+                <input type="" class="form-control" placeholder="搜索" name='text'>
+            </div>
+            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>搜索</button>
+        </form>
             {% if session.username %}
             <li style="margin-left:5%">
                 <a href="{{url_for('center_person')}}">欢迎{{ session.username }}</a></li>
