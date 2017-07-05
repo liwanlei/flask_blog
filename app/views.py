@@ -65,7 +65,7 @@ def reg():
 					return render_template('reg.html',form=form)
 	return render_template('reg.html',form=form)
 @app.route('/post/<string:post_id>',methods=['GET','POST'])
-@cache.cached(timeout=60*6)
+
 def post(post_id):
   fenleis=db.session.query(Classifa).all()
   post=Post.query.filter_by(id=post_id).first()
@@ -128,6 +128,7 @@ def new_post():
       new_post.classname=classnmae
       db.session.add(new_post)
       db.session.commit()
+      cache.clear()
       return  redirect(url_for('home'))
   return render_template('newpost.html',tags=tags,fenleis=fenlei,form=form)
 @app.route('/person',methods=['GET','POST'])
@@ -201,6 +202,7 @@ def edit(post_id):
         post.text = form.text.data
         db.session.add(post)
         db.session.commit()
+        cache.clear()
         return redirect(url_for('post',post_id=post_id))
     form=PostForm()
     form.title.data=post.title
@@ -268,7 +270,7 @@ def serch():
   if len(data) <=0:
     error='找不到你要搜索的内容'
     return render_template('serach.html',error=error,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
-  posts=data[:40]
+  posts=data[:30]
   return render_template('serach.html',posts=posts,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
 @app.route('/re_comment/<int:post_id>&<int:comment_id>&<string:user_id>',methods=['POST','GET'])
 @login_required
@@ -286,4 +288,5 @@ def re_comment(post_id,comment_id,user_id):
   new_re_comment=Comment(text=comenet_neirong,pid=comment_id,post_id=post_id,user_id=user.id,pid_username=user_id)
   db.session.add(new_re_comment)
   db.session.commit()
+  cache.clear()
   return redirect(url_for('post',post_id=post_id))

@@ -11,7 +11,7 @@ from common.admin_view import UserView,LinkView,CommentView,PostView,TagView,Cla
 from flask_admin.contrib.sqla import  ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_moment import Moment
-from api import api
+from Api import api
 flask_admin = Admin(app,name=u'后台管理系统',index_view=AdminIndexView(
         name='导航栏',
         url='/wodeguanliyuan'
