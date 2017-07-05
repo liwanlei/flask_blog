@@ -3,11 +3,10 @@
  {%block nav%}
  {%for nav in fenleis%}
  <li >
-            <a href="{{url_for ('fenlei',fenlei_name=nav.name)}}" style="color: #0f0f0f">{{nav.name}}
-            </a>
+<a href="{{url_for ('fenlei',fenlei_name=nav.name)}}" style="color: #0f0f0f">{{nav.name}}</a>
         </li>
-        {%endfor%}
-        {%endblock%}
+{%endfor%}
+{%endblock%}
 {% block body%}
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -68,10 +67,10 @@
       {%if comment.pid%}
    <div style="padding: 9px;word-wrap : break-word ;">
   <h5><a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>
-  回复<a href="#"></a>  时间：{{ moment(comment.date).fromNow(refresh=True) }} 
+  回复<a href="{{url_for('user',username=comment.pid_username)}}">{{comment.pid_username}}</a>  时间：{{ moment(comment.date).fromNow(refresh=True) }} 
   <a style="float:right" onclick="document.getElementById('{{comment.id}}').removeAttribute('class','hide')">回复</a></h5> 
           <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id)}}">
+          <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id,user_id=comment.users.username)}}">
             <div class="form-group">
               <textarea class="form-control" rows="3" name='beijing'></textarea>
               <p></p>
@@ -85,7 +84,7 @@
   <h5>评论者：<a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>  时间：{{ moment(comment.date).fromNow(refresh=True) }} 
   <a style="float:right" onclick="document.getElementById('{{comment.id}}').removeAttribute('class','hide')">回复</a></h5> 
           <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id)}}">
+          <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id,user_id=comment.users.username)}}">
             <div class="form-group">
               <textarea class="form-control" rows="3" name='beijing'></textarea>
               <p></p>

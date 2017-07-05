@@ -24,6 +24,7 @@ class User(db.Model):
     user_qq=db.Column(db.Integer(),nullable=True,unique=True)
     last_time_login=db.Column(db.DateTime(),default=datetime.datetime.now())
     user_image=db.Column(db.String(252),nullable=True)
+    user_token=db.Column(db.String(580),nullable=True)
     posts = db.relationship(
         'Post',
         backref='users',
@@ -38,6 +39,14 @@ class User(db.Model):
         'Comment',
         backref='users',
         lazy='dynamic')
+    def to_json(self):
+        user_json={
+        'username':self.username,
+        'user_email':self.user_email,
+        'posts':self.posts.count(),
+        'followed':self.followed.count()
+        }
+        return user_json
     def __repr__(self):
         return  self.username
     def set_password(self,password):
@@ -86,6 +95,14 @@ class Post(db.Model):
     	backref=db.backref('posts'))
     def __repr__(self):
         return "<Model Post `{}`>".format(self.title)
+    def to_json(self):
+        post_json={
+        'title':self.title,
+        'text':self.text,
+        'publish_date':self.publish_date,
+        'comments':self.comments.count()
+        }
+        return post_json
 class Comment(db.Model):
     __tablename__='comments'
     id = db.Column(db.Integer(), primary_key=True)
@@ -94,9 +111,15 @@ class Comment(db.Model):
     post_id =db.Column(db.Integer(), db.ForeignKey('posts.id'))
     user_id=db.Column(db.Integer(),db.ForeignKey('users.id'))
     pid=db.Column(db.Integer(),db.ForeignKey('comments.id'))
+    pid_username=db.Column(db.String(),nullable=True)
     def __repr__(self):
         return '<Model Comment `{}`>'.format(self.text)
-comment=db.relationship('Comment',backref='comment_id',lazy='dynamic', uselist=False)
+    def to_json(self):
+        comment_json={
+        'text':self.text,
+        'date':self.date
+        }
+        return comment_json
 class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer(), primary_key=True)

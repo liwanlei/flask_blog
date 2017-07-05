@@ -4,7 +4,7 @@
 # @Site    : 
 # @File    : views.py
 # @Software: PyCharm
-from app import app,db
+from app import app,db,cache
 from flask_login import login_required,login_user
 from flask import render_template,redirect,flash,url_for,session,request
 from app.models import Post,Tag,User,Link,Comment,Classifa
@@ -20,6 +20,7 @@ def get_tui_link():
   return link,tuijian_post,fenlei
 @app.route('/',methods=['GET'])
 @app.route('/<int:page>')
+@cache.cached(timeout=60*6)
 def home(page=1):
 	pagination=Post.query.order_by(Post.publish_date.desc()).paginate(page, per_page=10,error_out=False)
 	posts = pagination.items
@@ -64,6 +65,7 @@ def reg():
 					return render_template('reg.html',form=form)
 	return render_template('reg.html',form=form)
 @app.route('/post/<string:post_id>',methods=['GET','POST'])
+@cache.cached(timeout=60*6)
 def post(post_id):
   fenleis=db.session.query(Classifa).all()
   post=Post.query.filter_by(id=post_id).first()
@@ -92,6 +94,7 @@ def logout():
 	return redirect(url_for('home'))
 @app.route('/fenlei/<string:fenlei_name>')
 @app.route('/fenlei/<string:fenlei_name>&<int:page>')
+@cache.cached(timeout=60*6)
 def fenlei(fenlei_name,page=1):
   pyth=Classifa.query.filter_by(name=fenlei_name).first()
   pyth_post=pyth.posts
@@ -129,6 +132,7 @@ def new_post():
   return render_template('newpost.html',tags=tags,fenleis=fenlei,form=form)
 @app.route('/person',methods=['GET','POST'])
 @login_required
+@cache.cached(timeout=60*6)
 def center_person():
   user_id=User.query.filter_by(username=session.get('username')).first()
   posts=Post.query.filter_by(user_id=user_id.id).all()
@@ -140,6 +144,7 @@ def center_person():
   return render_template('person_center.html',username=user_id,posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
 @app.route('/person/<string:fenlei1>',methods=['GET','POST'])
 @login_required
+@cache.cached(timeout=60*6)
 def person(fenlei1):
   user_id=User.query.filter_by(username=session.get('usernmae')).first()
   post_fenlei=Post.query.filter_by(user_id=user_id).all()
@@ -160,6 +165,7 @@ def person(fenlei1):
     fenleis=fenleis)
 @app.route('/tag/<string:tag>',methods=['GET','POST'])
 @app.route('/tag/<string:tag>&<int:page>')
+@cache.cached(timeout=60*6)
 def tag(tag,page=1):
   tags=Tag.query.filter_by(name=tag).first()
   pyth_post=tags.posts
@@ -201,18 +207,25 @@ def edit(post_id):
     form.text.data=post.text
     return render_template('edit.html',form=form,tags=tags,fenleis=fenleis)
 @app.route('/user/<string:username>',methods=['GET','POST'])
+@cache.cached(timeout=60*6)
 def user(username):
   if session.get('username'):
     if username==session['username']:
       return redirect(url_for('center_person'))
     user_id=User.query.filter_by(username=username).first()
-    posts=Post.query.filter_by(user_id=user_id).all()
+    try:
+      posts=Post.query.filter_by(user_id=user_id).all()
+      tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
+      return render_template('user.html',username=user_id,posts=posts,tuijian_posts=tuijian_posts)
+    except:
+      return render_template('user.html',username=user_id)
+  user_id=User.query.filter_by(username=username).first()
+  try:
+    posts=Post.query.filter_by(user_id=user_id.id).all()
     tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
-    return render_template('user.html',username=username,posts=posts,tuijian_posts=tuijian_posts)
-  user_id=User.query.filter_by(username=username).first().id
-  posts=Post.query.filter_by(user_id=user_id).all()
-  tuijian_posts = Post.query.filter_by(user_id=user_id,is_recomment=True).all()
-  return render_template('user.html',username=username,posts=posts,tuijian_posts=tuijian_posts)
+    return render_template('user.html',username=user_id,posts=posts,tuijian_posts=tuijian_posts)
+  except:
+    return render_template('user.html',username=user_id)
 @app.route('/editperson',methods=['GET','POST'])
 @login_required
 def editperson():#这里目前需要对上传路径进行优化
@@ -245,6 +258,7 @@ def page_not_found(e):
 def page_not_found(e):
   return render_template('505.html'),505
 @app.route('/serach',methods=['GET','POST'])
+@cache.cached(timeout=60*6)
 def serch():
   link,tuijian_post,fenlei=get_tui_link()
   serch=request.form.get('text')
@@ -256,11 +270,11 @@ def serch():
     return render_template('serach.html',error=error,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
   posts=data[:40]
   return render_template('serach.html',posts=posts,tuijian_post=tuijian_post,fenleis=fenlei,links=link)
-@app.route('/re_comment/<int:post_id>&<int:comment_id>',methods=['POST','GET'])
+@app.route('/re_comment/<int:post_id>&<int:comment_id>&<string:user_id>',methods=['POST','GET'])
 @login_required
-def re_comment(post_id,comment_id):
+def re_comment(post_id,comment_id,user_id):
   user_comment=session['username']
-  user_id=User.query.filter_by(username=user_comment).first()
+  user=User.query.filter_by(username=user_comment).first()
   link,tuijian_post,fenlei=get_tui_link()
   post=Post.query.filter_by(id=post_id).first()
   comment=Comment.query.filter_by(post_id=post_id).all()
@@ -269,7 +283,7 @@ def re_comment(post_id,comment_id):
   if comenet_neirong is None:
     flash('回复失败')
     return render_template('post.html',post=post,user=user,form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post,fenleis=fenlei)
-  new_re_comment=Comment(text=comenet_neirong,pid=comment_id,post_id=post_id,user_id=user_id.id)
+  new_re_comment=Comment(text=comenet_neirong,pid=comment_id,post_id=post_id,user_id=user.id,pid_username=user_id)
   db.session.add(new_re_comment)
   db.session.commit()
   return redirect(url_for('post',post_id=post_id))
