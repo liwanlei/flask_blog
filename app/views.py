@@ -37,6 +37,15 @@ def login():
 		if check==True:
 			login_user(user)
 			session['username']=form.username.data
+			cache.clear()
+			posts=Post.query.filter_by(user_id=user.id).all()
+			xiaoxi=0
+			for post in posts:
+				post_coment=db.session.query(Comment).filter(Comment.post_id==post.id,Comment.date<=datetime.datetime.now(),Comment.date>=user.last_time_login).count()
+				xiaoxi+=int(post_coment)
+			print(xiaoxi)
+			if xiaoxi ==0:
+				return redirect(url_for('home'))
 			return redirect(url_for('home'))
 		return render_template('login.html',form=form)
 	return render_template('login.html',form=form)
@@ -84,12 +93,19 @@ def post(post_id):
     add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
     db.session.add(add_comment)
     db.session.commit()
+    cache.clear()
     return redirect(url_for('post',post_id=post_id))
   return render_template('post.html',post=post,user=user,fenleis=fenleis,
     form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
 @app.route('/logout',methods=['GET','POST'])
 def logout():
+	user=session['username']
+	user_log=User.query.filter_by(username=user).first()
+	user_log.last_time_login=datetime.datetime.now()
+	db.session.add(user_log)
+	db.session.commit()
 	session.clear()
+	cache.clear()
 	return redirect(url_for('home'))
 @app.route('/fenlei/<string:fenlei_name>')
 @app.route('/fenlei/<string:fenlei_name>&<int:page>')
