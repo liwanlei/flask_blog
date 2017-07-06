@@ -20,7 +20,7 @@ def get_tui_link():
   return link,tuijian_post,fenlei
 @app.route('/',methods=['GET'])
 @app.route('/<int:page>')
-@cache.cached(timeout=60*6)
+@cache.cached(timeout=60*3)
 def home(page=1):
 	pagination=Post.query.order_by(Post.publish_date.desc()).paginate(page, per_page=10,error_out=False)
 	posts = pagination.items
@@ -65,7 +65,6 @@ def reg():
 					return render_template('reg.html',form=form)
 	return render_template('reg.html',form=form)
 @app.route('/post/<string:post_id>',methods=['GET','POST'])
-
 def post(post_id):
   fenleis=db.session.query(Classifa).all()
   post=Post.query.filter_by(id=post_id).first()
@@ -94,7 +93,7 @@ def logout():
 	return redirect(url_for('home'))
 @app.route('/fenlei/<string:fenlei_name>')
 @app.route('/fenlei/<string:fenlei_name>&<int:page>')
-@cache.cached(timeout=60*6)
+@cache.cached(timeout=60*3)
 def fenlei(fenlei_name,page=1):
   pyth=Classifa.query.filter_by(name=fenlei_name).first()
   pyth_post=pyth.posts
@@ -133,7 +132,7 @@ def new_post():
   return render_template('newpost.html',tags=tags,fenleis=fenlei,form=form)
 @app.route('/person',methods=['GET','POST'])
 @login_required
-@cache.cached(timeout=60*6)
+@cache.cached(timeout=60*3)
 def center_person():
   user_id=User.query.filter_by(username=session.get('username')).first()
   posts=Post.query.filter_by(user_id=user_id.id).all()
@@ -145,7 +144,7 @@ def center_person():
   return render_template('person_center.html',username=user_id,posts=posts,tuijian_posts=tuijian_posts,fenleis=fenleis)
 @app.route('/person/<string:fenlei1>',methods=['GET','POST'])
 @login_required
-@cache.cached(timeout=60*6)
+@cache.cached(timeout=60*3)
 def person(fenlei1):
   user_id=User.query.filter_by(username=session.get('usernmae')).first()
   post_fenlei=Post.query.filter_by(user_id=user_id).all()
@@ -166,7 +165,7 @@ def person(fenlei1):
     fenleis=fenleis)
 @app.route('/tag/<string:tag>',methods=['GET','POST'])
 @app.route('/tag/<string:tag>&<int:page>')
-@cache.cached(timeout=60*6)
+@cache.cached(timeout=60*3)
 def tag(tag,page=1):
   tags=Tag.query.filter_by(name=tag).first()
   pyth_post=tags.posts
@@ -209,7 +208,7 @@ def edit(post_id):
     form.text.data=post.text
     return render_template('edit.html',form=form,tags=tags,fenleis=fenleis)
 @app.route('/user/<string:username>',methods=['GET','POST'])
-@cache.cached(timeout=60*6)
+@cache.cached(timeout=60*3)
 def user(username):
   if session.get('username'):
     if username==session['username']:
@@ -260,7 +259,7 @@ def page_not_found(e):
 def page_not_found(e):
   return render_template('505.html'),505
 @app.route('/serach',methods=['GET','POST'])
-@cache.cached(timeout=60*6)
+@cache.cached(timeout=60*3)
 def serch():
   link,tuijian_post,fenlei=get_tui_link()
   serch=request.form.get('text')
