@@ -30,6 +30,7 @@ def home(page=1):
     links=link)
 @app.route('/login',methods=['GET','POST'])
 def login():
+	#request_url=request.headers.get('Referer')
 	form=Baselogin()
 	if form.validate_on_submit():
 		user=User.query.filter_by(username=form.username.data).first()
@@ -38,14 +39,6 @@ def login():
 			login_user(user)
 			session['username']=form.username.data
 			cache.clear()
-			posts=Post.query.filter_by(user_id=user.id).all()
-			xiaoxi=0
-			for post in posts:
-				post_coment=db.session.query(Comment).filter(Comment.post_id==post.id,Comment.date<=datetime.datetime.now(),Comment.date>=user.last_time_login).count()
-				xiaoxi+=int(post_coment)
-			print(xiaoxi)
-			if xiaoxi ==0:
-				return redirect(url_for('home'))
 			return redirect(url_for('home'))
 		return render_template('login.html',form=form)
 	return render_template('login.html',form=form)
