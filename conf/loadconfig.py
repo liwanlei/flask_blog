@@ -7,10 +7,10 @@ def lod_config():
     mode=os.environ.get('MODE')
     try:
         if mode == 'PRODUCTION':
-            from ..config import ProductionConfig
+            from .config import ProductionConfig
             return ProductionConfig
         elif mode == 'TESTING':
-            from ..config import testconfig
+            from .config import testconfig
             return testconfig
         else:
             from .config import devconfig
