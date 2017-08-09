@@ -26,7 +26,7 @@
   <p>是否推荐<input type="checkbox" name="checkbox"></p>
     <span class="checkbox inline"><strong>标签</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
          {% for tag in tags %}
-             <input type="checkbox" name="tag" style="width: 20px" value="{{ tag.name }}"> {{ tag.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             <input type="checkbox" name="tag" style="width: 20px" value="{{ tag.name }}"> {{ tag.name,page=1}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         {% endfor %}
     </span>
   <label class="radio"><strong>分类</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

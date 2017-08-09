@@ -3,7 +3,7 @@
  {%block nav%}
  {%for nav in fenleis%}
  <li id='{{nav.name}}' onclick="document.getElementById('{{nav.name}}').setAttribute('class','active')">
-            <a href="{{url_for ('fenlei',fenlei_name=nav.name)}}" style="color: #0f0f0f" >{{nav.name}}
+            <a href="{{url_for ('fenlei',fenlei_name=nav.name,page=1)}}" style="color: #0f0f0f" >{{nav.name}}
             </a>
         </li>
         {%endfor%}
