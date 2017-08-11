@@ -6,8 +6,8 @@ from wtforms import PasswordField,StringField,TextAreaField,IntegerField,SubmitF
 from wtforms.validators import DataRequired
 from app.models import User
 class Baselogin(Form):
-	username=StringField(u'用户名',[validators.length(min=6, max=16,message=u'用户名长度6-16'),validators.DataRequired()],render_kw={'placeholder':u'输入用户名'})
-	password=PasswordField(u'密码',[validators.length(min=6, max=16,message=u'密码长度是6-16'),validators.DataRequired()],render_kw={'placeholder':u'输入密码'})
+	username=StringField(u'用户名',[validators.length(min=6, max=16,message=u'用户名长度6-16'),validators.DataRequired(message=u'用户名不能为空')],render_kw={'placeholder':u'输入用户名'})
+	password=PasswordField(u'密码',[validators.length(min=6, max=16,message=u'密码长度是6-16'),validators.DataRequired(message=u'密码不能为空')],render_kw={'placeholder':u'输入密码'})
 	def validate(self):
 		check_validata=super(Baselogin,self).validate()
 		if not check_validata:
@@ -22,9 +22,9 @@ class Baselogin(Form):
 				return False
 			return True
 class Basereg(Form):
-	username=StringField(u'用户名',[validators.length(min=6, max=16,message=u'用户名长度6-16'),validators.DataRequired()],render_kw={'placeholder':u'输入用户名'})
-	password=PasswordField(u'密码',[validators.length(min=6, max=16,message=u'密码长度是6-16'),validators.DataRequired()],render_kw={'placeholder':u'输入密码'})
-	queren_pass=PasswordField(u'确认密码',[validators.length(min=6, max=16,message=u'密码长度是6-16'),validators.DataRequired()],render_kw={'placeholder':u'输入密码'})
+	username=StringField(u'用户名',[validators.length(min=6, max=16,message=u'用户名长度6-16'),validators.DataRequired(message=u'用户名不能为空')],render_kw={'placeholder':u'输入用户名'})
+	password=PasswordField(u'密码',[validators.length(min=6, max=16,message=u'密码长度是6-16'),validators.DataRequired(message=u'密码不能为空')],render_kw={'placeholder':u'输入密码'})
+	queren_pass=PasswordField(u'确认密码',[validators.length(min=6, max=16,message=u'密码长度是6-16'),validators.DataRequired(message=u'密码不能为空')],render_kw={'placeholder':u'输入密码'})
 	def  validate(self):
 		check_validate = super(Basereg, self).validate()
 		if not check_validate:
@@ -35,7 +35,7 @@ class Basereg(Form):
 			return False
 		return True
 class find_pass(Form):
-	email = StringField('email', [validators.DataRequired()],render_kw={'placeholder':u'请输入邮箱'})
+	email = StringField('email', [validators.DataRequired(message=u'请输入邮箱')],render_kw={'placeholder':u'请输入邮箱'})
 class PostForm(Form):
 	title = StringField(u'标题',validators=[validators.DataRequired(),validators.length(min=1,max=255,message=u'请输入评论内容')],render_kw={'placeholder':u'请输入标题'})
 	text = TextAreaField(u'正文',validators= [validators.DataRequired()])
