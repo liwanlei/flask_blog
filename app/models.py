@@ -16,23 +16,23 @@ post_class=db.Table('post_class',
     db.Column('post_id',db.Integer(),db.ForeignKey('posts.id')),
     db.Column('classifa_id',db.Integer(),db.ForeignKey('fenlei.id')))
 class Permisson:
-    FOLLOW = 0x01             # 关注用户
-    COMMENT = 0x02            # 在他人的文章中发表评论
-    WRITE_ARTICLES = 0x04     # 写文章
-    MODERATE_COMMENTS = 0x08  # 管理他人发表的评论
-    ADMINISTRATOR = 0xff      # 管理者权限
+    FOLLOW = 0x01             
+    COMMENT = 0x02           
+    WRITE_ARTICLES = 0x04     
+    MODERATE_COMMENTS = 0x08  
+    ADMINISTRATOR = 0xff     
 class Role(db.Model):
     __tablename__='roles'
     id=db.Column(db.Integer(),primary_key=True)
     name = db.Column(db.String(), nullable=True, unique=True)
-    default = db.Column(db.Boolean(), default=False)      # 只有一个角色的字段要设为True,其它都为False
-    permissions = db.Column(db.Integer())                 # 不同角色的权限不同
-    users = db.relationship('User', backref='itsrole')  # Role对象引用users,User对象引用itsrole                                                  # 是隐形存在的属性,一对多
+    default = db.Column(db.Boolean(), default=False)     
+    permissions = db.Column(db.Integer())                
+    users = db.relationship('User', backref='itsrole')                                        
     @staticmethod
     def insert_roles():
         roles = {
             'User':(Permisson.FOLLOW|Permisson.COMMENT|
-                    Permisson.WRITE_ARTICLES, True),     # 只有普通用户的default为True
+                    Permisson.WRITE_ARTICLES, True),   
             'Moderare':(Permisson.FOLLOW|Permisson.COMMENT|
                         Permisson.WRITE_ARTICLES|Permisson.MODERATE_COMMENTS, False),
             'Administrator':(0xff, False)
@@ -73,16 +73,16 @@ class User(db.Model):
         backref='users',
         lazy='dynamic')
     def __init__(self, **kwargs):
-        super(User, self).__init__(**kwargs)        # 初始化父类
+        super(User, self).__init__(**kwargs)     
         if self.itsrole is None:
-            if self.user_email == current_app.config['FLASK_ADMIN']:                  # 邮箱与管理者邮箱相同
-                self.itsrole = Role.query.filter_by(permissions=0xff).first()    # 权限为管理者
+            if self.user_email == current_app.config['FLASK_ADMIN']:               
+                self.itsrole = Role.query.filter_by(permissions=0xff).first()  
             else:
-                self.itsrole = Role.query.filter_by(default=True).first()       # 默认用户
-    def can(self, permissions):          # 检查用户的权限
+                self.itsrole = Role.query.filter_by(default=True).first()   
+    def can(self, permissions):         
         return self.itsrole is not None and \
                (self.itsrole.permissions & permissions) == permissions
-    def is_administrator(self):         # 检查是否为管理者
+    def is_administrator(self):     
         return self.can(Permisson.ADMINISTRATOR)
     def to_json(self):
         user_json={
@@ -184,7 +184,7 @@ class Classifa(db.Model):
     name=db.Column(db.String(64))
     def __repr__(self):
         return self.name
-class AnonymousUser(AnonymousUserMixin):   # 匿名用户
+class AnonymousUser(AnonymousUserMixin):   
     def can(self, permissions):
         return False
     def is_administrator(self):

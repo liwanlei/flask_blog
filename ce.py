@@ -52,23 +52,23 @@ class RequestThread(threading.Thread):
             global mintime
             if ts<mintime:
                 mintime=ts
-print ('===========请求开始==========='  )
+print (u'===========请求开始==========='  )
 start_time = time.time()
 thread_count = 100
 i = 0  
 while i <= thread_count:  
-    t = RequestThread("线程：" + str(i))
+    t = RequestThread(u"线程：" + str(i))
     t.start()  
     i += 1  
 t=0
 while total<thread_count|t>20:
-        print ("总数:%d,成功数:%d,失败:%d,异常:%d\n"%(total,suc,fail,exception)  )
+        print (u"总数:%d,成功数:%d,失败:%d,异常:%d\n"%(total,suc,fail,exception)  )
         print (url)
         t+=1
         time.sleep(1)
-print ('===========task end===========')
-print ("总数:%d,成功:%d,失败:%d,异常:%d"%(total,suc,fail,exception))
-print ('响应最大时间:',maxtime)
-print ('响应最小时间',mintime)
-print ('大于3秒的响应:%d,占比:%0.2f'%(gt3,float(gt3)/total))
-print ('小于3秒:%d,占比:%0.2f'%(lt3,float(lt3)/total))
+print (u'===========task end===========')
+print (u"总数:%d,成功:%d,失败:%d,异常:%d"%(total,suc,fail,exception))
+print (u'响应最大时间:',maxtime)
+print (u'响应最小时间',mintime)
+print (u'大于3秒的响应:%d,占比:%0.2f'%(gt3,float(gt3)/total))
+print (u'小于3秒:%d,占比:%0.2f'%(lt3,float(lt3)/total))

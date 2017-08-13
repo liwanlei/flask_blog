@@ -22,6 +22,5 @@ cache=Cache(app)
 moment=Moment(app)
 bootstrp=Bootstrap(app)
 mail=Mail(app)
-
 app.permanent_session_lifetime=timedelta(minutes=50)
-from  app import views,models
+from  app import views,models,url

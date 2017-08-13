@@ -3,7 +3,7 @@
 # @Author  : lileilei
 # @File    : views.py
 # @Software: PyCharm
-from app import app,db,cache
+from app import app,db
 from flask_login import login_required,login_user
 from flask import render_template,redirect,flash,url_for,session,request
 from app.models import Post,Tag,User,Link,Comment,Classifa
@@ -36,7 +36,7 @@ class LoginView(MethodView):
   		if check==True:
   			login_user(user)
   			session['username']=form.username.data
-  			cache.clear()
+  #			cache.clear()
   			return redirect(url_for('home',page=1))
   		return render_template('login.html',form=form)
   	return render_template('login.html',form=form)
@@ -87,7 +87,7 @@ class PostViews(View):
       add_comment=Comment(date=date_now,post_id=post_id,user_id=user_id,text=text_comment)
       db.session.add(add_comment)
       db.session.commit()
-      cache.clear()
+   #   cache.clear()
       return redirect(url_for('post',post_id=post_id))
     return render_template('post.html',post=post,user=user,fenleis=fenleis,
       form=form,link=link,comments=reversed(comment),tuijian_post=tuijian_post)
@@ -99,11 +99,11 @@ class LogoutView(MethodView):
   	db.session.add(user_log)
   	db.session.commit()
   	session.clear()
-  	cache.clear()
+  	#cache.clear()
   	return redirect(url_for('home',page=1))
 class FenleiHome(View):
   methods=['GET','POST']
-  @cache.cached(timeout=60*3)
+  #@cache.cached(timeout=60*3)
   def dispatch_request(self,fenlei_name,page=1):
     pyth=Classifa.query.filter_by(name=fenlei_name).first()
     pyth_post=pyth.posts
@@ -138,13 +138,13 @@ class NewView(View):
         new_post.classname=classnmae
         db.session.add(new_post)
         db.session.commit()
-        cache.clear()
+   #     cache.clear()
         return  redirect(url_for('home'))
     return render_template('newpost.html',tags=tags,fenleis=fenlei,form=form)
 class PersonView(View):
   methods=['GET','POST']
   @login_required
-  @cache.cached(timeout=60*3)
+  #@cache.cached(timeout=60*3)
   def dispatch_request(self):
     user_id=User.query.filter_by(username=session.get('username')).first()
     posts=Post.query.filter_by(user_id=user_id.id).all()
@@ -157,7 +157,7 @@ class PersonView(View):
 class PersonFenleiView(View):
   methods=['GET','POST']
   @login_required
-  @cache.cached(timeout=60*3)
+  #@cache.cached(timeout=60*3)
   def dispatch_request(self,fenlei1):
     user_id=User.query.filter_by(username=session.get('usernmae')).first()
     post_fenlei=Post.query.filter_by(user_id=user_id).all()
@@ -215,7 +215,7 @@ class EditpostView(View):
           post.text = form.text.data
           db.session.add(post)
           db.session.commit()
-          cache.clear()
+   #       cache.clear()
           return redirect(url_for('post',post_id=post_id))
       form=PostForm()
       form.title.data=post.title
@@ -223,7 +223,7 @@ class EditpostView(View):
       return render_template('edit.html',form=form,tags=tags,fenleis=fenleis)
 class Userviews(View):
   methods=['GET','POST']
-  @cache.cached(timeout=60*3)
+  #@cache.cached(timeout=60*3)
   def dispatch_request(self,username):
     if session.get('username'):
       if username==session['username']:
@@ -276,7 +276,7 @@ def page_not_found(e):
   return render_template('505.html'),505
 class SerchView(View):
   methods=['GET','POST']
-  @cache.cached(timeout=60*3)
+  #@cache.cached(timeout=60*3)
   def dispath_request():
     link,tuijian_post,fenlei=get_tui_link()
     serch=request.form.get('text')
@@ -305,5 +305,5 @@ class RecommentView(View):
     new_re_comment=Comment(text=comenet_neirong,pid=comment_id,post_id=post_id,user_id=user.id,pid_username=user_id)
     db.session.add(new_re_comment)
     db.session.commit()
-    cache.clear()
+   # cache.clear()
     return redirect(url_for('post',post_id=post_id))

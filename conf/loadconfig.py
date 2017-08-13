@@ -3,7 +3,6 @@
 # @Author  : lileilei
 import os
 def lod_config():
-    '''加载配置'''
     mode=os.environ.get('MODE')
     try:
         if mode == 'PRODUCTION':
@@ -16,4 +15,4 @@ def lod_config():
             from .config import devconfig
             return devconfig
     except ImportError as e:
-        print('加载配置失败原因:%s'%e)
+        print(u'加载配置失败原因:%s'%e)
