@@ -13,7 +13,7 @@ from  flask_cache import Cache
 from flask_moment import  Moment
 import os
 from  datetime import  timedelta
-os.environ['MODE']='PRODUCTION'
+os.environ['MODE']=''
 app=Flask(__name__)
 config = loadconfig.lod_config()
 app.config.from_object(config)

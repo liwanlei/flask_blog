@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 0dce626f3c70
+Revision ID: d8ff4db03a43
 Revises: 
-Create Date: 2017-07-15 13:56:50.305619
+Create Date: 2017-08-13 15:33:24.458810
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0dce626f3c70'
+revision = 'd8ff4db03a43'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,6 +29,14 @@ def upgrade():
     sa.Column('url', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('roles',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(), nullable=True),
+    sa.Column('default', sa.Boolean(), nullable=True),
+    sa.Column('permissions', sa.Integer(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
+    )
     op.create_table('tags',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=True),
@@ -45,6 +53,8 @@ def upgrade():
     sa.Column('last_time_login', sa.DateTime(), nullable=True),
     sa.Column('user_image', sa.String(length=252), nullable=True),
     sa.Column('user_token', sa.String(length=580), nullable=True),
+    sa.Column('role_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('password'),
     sa.UniqueConstraint('user_qq')
@@ -104,6 +114,7 @@ def downgrade():
     op.drop_index(op.f('ix_users_username'), table_name='users')
     op.drop_table('users')
     op.drop_table('tags')
+    op.drop_table('roles')
     op.drop_table('links')
     op.drop_table('fenlei')
     # ### end Alembic commands ###
