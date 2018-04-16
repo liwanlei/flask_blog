@@ -2,48 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   <title>{% block title %}编辑文章{% endblock %}</title>
+    <title>{% block title %}编辑文章{% endblock %}</title>
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="../static/css/bootstrap.min.css"></script>
+    <script src="../static/css/bootstrap.min.css"></script>
 </head>
 <body background="../static/img/178.jpg" >
 <div class="col-md-9" style="margin-left:10%">
-<div class="row">
-  <h1 >编辑中心</h1><span><a href="{{url_for('center_person')}}">返回个人中心</a></span>
-  <form method="POST" action="">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.title.label }}
-      {% if form.title.errors %}
-        {% for e in form.title.errors %}
-          <p class="help-block">{{ e }}</p>
-        {% endfor %}
-      {% endif %}
-      {{ form.title(class_='form-control') }}
+    <div class="row">
+        <h1 >编辑中心</h1><span><a href="{{url_for('center_person')}}">返回个人中心</a></span>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.title.label }}
+                {% if form.title.errors %}
+                    {% for e in form.title.errors %}
+                        <p class="help-block">{{ e }}</p>
+                    {% endfor %}
+                {% endif %}
+                {{ form.title(class_='form-control') }}
+            </div>
+            <p>是否推荐<input type="checkbox" name="checkbox"></p>
+            <span class="checkbox inline"><strong>标签</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for tag in tags %}
+                    <input type="checkbox" name="tag" style="width: 20px" value="{{ tag.name }}"> {{ tag.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% endfor %}
+            </span>
+            <label class="radio"><strong>分类</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for fenlei in fenleis %}
+                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="{{ fenlei.name }}" >{{ fenlei.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% endfor %}
+            </label>
+            <div class="form-gruop">
+                {{ form.text.label }}
+                {% if form.text.errors %}
+                    {% for e in form.text.errors %}
+                        <p class="help-block">{{ e }}</p>
+                    {% endfor %}
+                {% endif %}
+                {{ form.text(id="editor") }}
+            </div>
+            <button class="btn-primary" type="submit" style="width: 80px;height: 40px" >编写</button>
+        </form>
     </div>
-  <p>是否推荐<input type="checkbox" name="checkbox"></p>
-    <span class="checkbox inline"><strong>标签</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-         {% for tag in tags %}
-             <input type="checkbox" name="tag" style="width: 20px" value="{{ tag.name }}"> {{ tag.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        {% endfor %}
-    </span>
-  <label class="radio"><strong>分类</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      {% for fenlei in fenleis %}
-  <input type="radio" name="optionsRadios" id="optionsRadios1" value="{{ fenlei.name }}" >{{ fenlei.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      {% endfor %}
-</label>
-    <div class="form-gruop">
-      {{ form.text.label }}
-      {% if form.text.errors %}
-        {% for e in form.text.errors %}
-          <p class="help-block">{{ e }}</p>
-        {% endfor %}
-      {% endif %}
-      {{ form.text(id="editor") }}
-    </div>
-      <button class="btn-primary" type="submit" style="width: 80px;height: 40px" >编写</button>
-  </form>
-</div>
 </div>
 <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
 <script>

@@ -2,51 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   <title>{% block title %}登录{% endblock %}</title>
+    <title>{% block title %}登录{% endblock %}</title>
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="icon" href="../static/img/0.jpg" type="image/x-icon" />
-	<script src="../static/js/jquery-2.1.4.min.js"></script>
-	<script src="../static/css/bootstrap.min.css"></script>
-	<style type="text/css">
-		#divcss5{margin:0 500px ;border:0px solid #000;width:300px;height:100px;
-		margin-top: 73px;} 
-	</style>
+    <script src="../static/js/jquery-2.1.4.min.js"></script>
+    <script src="../static/css/bootstrap.min.css"></script>
+    <style type="text/css">
+        #divcss5{margin:0 500px ;border:0px solid #000;width:300px;height:100px;
+            margin-top: 73px;}
+    </style>
 </head>
 <body background="../static/img/178.jpg"  style="background-size:cover">
 <div></div>
-
 <div class="col-md-9"  id="divcss5">
-<h3 style="text-align: center">登录中心</h3>
-<form method="POST" action="{{ url_for('login')
-    }}">
+    <h3 style="text-align: center">登录中心</h3>
+    <form method="POST" action="{{ url_for('login')
+            }}">
      
-    {{ form.hidden_tag() }}
-    <div >
-      {{ form.username.label }}
-      {% if form.username.errors %}
-        {% for e in form.username.errors %}
-          <p class="help-block">{{ e }}</p>
-        {% endfor %}
-      {% endif %}
-      {{ form.username(class_="form-control") }}
+        {{ form.hidden_tag() }}
+        <div >
+            {{ form.username.label }}
+            {% if form.username.errors %}
+                {% for e in form.username.errors %}
+                    <p class="help-block">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.username(class_="form-control") }}
+        </div>
+        <div class="form-group" >
+            {{ form.password.label }}
+            {% if form.password.errors %}
+                {% for e in form.password.errors %}
+                    <p class="help-block">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ form.password(class_='form-control') }}
+        </div>
+        <input class="btn btn-primary" type="submit" value="登录">
+    </form>
+    <div class="block" style="line-height: 2.8;    color: white;font-size: 20px;">
+        <a href="{{ url_for('reg')
+                }}">注册</a>
     </div>
-    <div class="form-group" >
-      {{ form.password.label }}
-      {% if form.password.errors %}
-        {% for e in form.password.errors %}
-          <p class="help-block">{{ e }}</p>
-        {% endfor %}
-      {% endif %}
-      {{ form.password(class_='form-control') }}
-    </div>
-    <input class="btn btn-primary" type="submit" value="登录">
-    
-  </form>
-<div class="block" style="line-height: 2.8;    color: white;font-size: 20px;">
-	<a href="{{ url_for('reg')
-    }}">注册</a>
 </div>
-</div>
-
 </body>
 </html>

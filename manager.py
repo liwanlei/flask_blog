@@ -8,11 +8,7 @@ from flask_login import LoginManager
 from  datetime import  timedelta
 from flask_admin import Admin,AdminIndexView
 from common.admin_view import UserView,LinkView,CommentView,PostView,TagView,ClassView
-from flask_admin.contrib.sqla import  ModelView
-from flask_admin.contrib.fileadmin import FileAdmin
 from flask_moment import Moment
-from app.views import HomeView,RegView,LoginView,LogoutView,PersonFenleiView,TagViews,SerchView,NewView,PersonView,EditpersonView,PostViews,Userviews,RecommentView,EditpostView,FenleiHome
-from Api import api
 flask_admin = Admin(app,name=u'后台管理系统',index_view=AdminIndexView(
         name=u'导航栏',url='/wodeguanliyuan'))
 flask_admin.add_view(UserView(db.session,name=u'用户'))
@@ -32,7 +28,5 @@ def load_user(user_id):
     return User.query.get(user_id)
 manager.add_command('run',Server(use_debugger=True))
 app.permanent_session_lifetime=timedelta(minutes=50)
-app.register_blueprint(api,url_prefix='/api')
-
 if __name__ == '__main__':
-	manager.run()
+    app.run(debug=True)

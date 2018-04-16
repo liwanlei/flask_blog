@@ -1,114 +1,110 @@
 {%extends 'base.html'%}
 {% block title %}{{post.title}}{% endblock %}
- {%block nav%}
- {%for nav in fenleis%}
- <li >
-<a href="{{url_for ('fenlei',fenlei_name=nav.name)}}" style="color: #0f0f0f">{{nav.name}}</a>
+{%block nav%}
+    {%for nav in fenleis%}
+        <li >
+            <a href="{{url_for ('fenlei',fenlei_name=nav.name)}}" style="color: #0f0f0f">{{nav.name}}</a>
         </li>
-{%endfor%}
+    {%endfor%}
 {%endblock%}
 {% block body%}
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-<h2><a href=""> {{post.title}}</a></h2>
-<p>{{post.text|safe}}</p>
-    <span class="glyphicon glyphicon-tag">标签</span> {%for tag in post.tag%}<a href='{{url_for('tag',tag=tag,page=1)}}'>{{tag}}</a>
-    {%endfor%}&nbsp;
-    <p>&nbsp;</p>
-<p>
-
- <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<a href="{{url_for('user',username=user.username)}}">{{user.username}}</a>
-<span  style="margin: 0 5px 0 0;">&nbsp;于&nbsp;{{post.publish_date}}&nbsp;</span>发布
-&nbsp;&nbsp;
-<a href='{{ url_for('edit',post_id=post.id) }}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-pencil"></span>&nbsp;编辑</a>&nbsp;
-<a href='{{url_for('new_post')}}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-edit"></span>&nbsp;写文章</a>
-</p> 
-<h3>评论:</h3>
-  {% if session.username %}
-  <form method="POST" action="{{ url_for('post', post_id=post.id)
-    }}">  
-    {{ form.hidden_tag() }}
-    <p>  作者:
-      <a href="{{ url_for('center_person') }}">{{ session.username }}</a>
-        
-    </p>
-    <p class="form-group">
-      {{ form.text.label }}
-      {% if form.text.errors %}
-        {% for e in form.text.errors %}
-          <p class="help-block">{{ e }}</p>
-        {% endfor %}
-      {% endif %}
-      {{ form.text(class_='tex' ,id='newName')|safe }}
-    </p>
-    <input class="btn btn-primary" type="submit" value="评论" >
     {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <p class=flashes style="color:#F00">
-    {% for message in messages %}
-      <p style="color:#F00">{{ message }}</p>
-    {% endfor %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <h2><a href=""> {{post.title}}</a></h2>
+    <p>{{post.text|safe}}</p>
+    <span class="glyphicon glyphicon-tag">标签</span> {%for tag in post.tag%}<a href='{{url_for('tag',tag=tag,page=1)}}'>{{tag}}</a>
+{%endfor%}&nbsp;
+    <p>&nbsp;</p>
+    <p>
+        <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<a href="{{url_for('user',username=user.username)}}">{{user.username}}</a>
+        <span  style="margin: 0 5px 0 0;">&nbsp;于&nbsp;{{post.publish_date}}&nbsp;</span>发布&nbsp;&nbsp;
+        <a href='{{ url_for('edit',post_id=post.id) }}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-pencil"></span>&nbsp;编辑</a>&nbsp;
+        <a href='{{url_for('new_post')}}'><span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-edit"></span>&nbsp;写文章</a>
     </p>
-  {% endif %}
-{% endwith %}
-  </form>
-  {% else %}
-   请<a href="{{ url_for('login') }}">登录</a>或<a href="{{url_for('reg')}}">注册</a>后在进行评论
-  {% endif %}
-      <h4>----------------------------</h4>
-      {% for comment in comments %}
-      {%if comment.pid%}
-   <div style="padding: 9px;word-wrap : break-word ;">
-  <h5><a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>
-  回复<a href="{{url_for('user',username=comment.pid_username)}}">{{comment.pid_username}}</a>  时间：{{ comment.date }} 
-  <a style="float:right" onclick="document.getElementById('{{comment.id}}').removeAttribute('class','hide')">回复</a></h5> 
-          <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id,user_id=comment.users.username)}}">
-            <div class="form-group">
-              <textarea class="form-control" rows="3" name='beijing'></textarea>
-              <p></p>
-              <input class="btn btn-primary" type="submit" value="回复">
+    <h3>评论:</h3>
+    {% if session.username %}
+        <form method="POST" action="{{ url_for('post', post_id=post.id)
+                }}">
+            {{ form.hidden_tag() }}
+            <p>  作者:
+                <a href="{{ url_for('center_person') }}">{{ session.username }}</a>
+            </p>
+            <p class="form-group">
+                {{ form.text.label }}
+                {% if form.text.errors %}
+                    {% for e in form.text.errors %}
+                        <p class="help-block">{{ e }}</p>
+                    {% endfor %}
+                {% endif %}
+            {{ form.text(class_='tex' ,id='newName')|safe }}
+            </p>
+            <input class="btn btn-primary" type="submit" value="评论" >
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <p class=flashes style="color:#F00">
+                        {% for message in messages %}
+                            <p style="color:#F00">{{ message }}</p>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            {% endwith %}
+        </form>
+    {% else %}
+        请<a href="{{ url_for('login') }}">登录</a>或<a href="{{url_for('reg')}}">注册</a>后在进行评论
+    {% endif %}
+    <h4>----------------------------</h4>
+    {% for comment in comments %}
+        {%if comment.pid%}
+            <div style="padding: 9px;word-wrap : break-word ;">
+                <h5><a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>
+                    回复<a href="{{url_for('user',username=comment.pid_username)}}">{{comment.pid_username}}</a>  时间：{{ comment.date }}
+                    <a style="float:right" onclick="document.getElementById('{{comment.id}}').removeAttribute('class','hide')">回复</a></h5>
+                <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id,user_id=comment.users.username)}}">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" name='beijing'></textarea>
+                        <p></p>
+                        <input class="btn btn-primary" type="submit" value="回复">
+                    </div>
+                </form>
             </div>
-          </form>
-          </div>
-          <p></p>
+            <p></p>
         {%else %}
-        <div style="padding: 9px;word-wrap : break-word ;">
-  <h5>评论者：<a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>  时间：{{ moment(comment.date).fromNow(refresh=True) }} 
-  <a style="float:right" onclick="document.getElementById('{{comment.id}}').removeAttribute('class','hide')">回复</a></h5> 
-          <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id,user_id=comment.users.username)}}">
-            <div class="form-group">
-              <textarea class="form-control" rows="3" name='beijing'></textarea>
-              <p></p>
-              <input class="btn btn-primary" type="submit" value="回复">
+            <div style="padding: 9px;word-wrap : break-word ;">
+                <h5>评论者：<a href="{{url_for('user',username=comment.users)}}">{{comment.users}}</a>  时间：{{ moment(comment.date).fromNow(refresh=True) }}
+                    <a style="float:right" onclick="document.getElementById('{{comment.id}}').removeAttribute('class','hide')">回复</a></h5>
+                <p style="line-height: 1.5;margin-left: 1em;color: #666;">{{ comment.text |safe }}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <form role="form" method="POST" class='hide' id='{{comment.id}}' action="{{ url_for('re_comment',post_id=post.id,comment_id=comment.id,user_id=comment.users.username)}}">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" name='beijing'></textarea>
+                        <p></p>
+                        <input class="btn btn-primary" type="submit" value="回复">
+                    </div>
+                </form>
             </div>
-          </form>
-          </div>
-          <p></p>
-          {%endif%}
-      {% endfor %}
+            <p></p>
+        {%endif%}
+    {% endfor %}
 {%endblock%}
 {% block tuijian %}
     {%for tui in tuijian_post%}
-    <p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></P>
+        <p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></P>
     {%endfor%}
-        {% endblock %}
+{% endblock %}
 {%block link%}
-{%for link1 in link%}
-<p><a href='{{link1.url}}'>{{link1.name}}</a></P>
-{%endfor%}
+    {%for link1 in link%}
+        <p><a href='{{link1.url}}'>{{link1.name}}</a></P>
+    {%endfor%}
 {% endblock %}
 {%block js %}
-    
 <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace('newName');
-</script>{%endblock%}
+    <script>
+        CKEDITOR.replace('newName');
+    </script>{%endblock%}

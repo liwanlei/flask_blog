@@ -1,41 +1,59 @@
 {% extends 'base.html' %}
 {% block title %}博客首页{% endblock %}
- {%block nav%}
- {%for nav in fenleis%}
- <li id='{{nav.name}}' onclick="document.getElementById('{{nav.name}}').setAttribute('class','active')">
+{%block nav%}
+    {%for nav in fenleis%}
+        <li id='{{nav.name}}' onclick="document.getElementById('{{nav.name}}').setAttribute('class','active')">
             <a href="{{url_for ('fenlei',fenlei_name=nav.name)}}" style="color: #0f0f0f" >{{nav.name}}
             </a>
         </li>
-        {%endfor%}
-        {%endblock%}
+    {%endfor%}
+{%endblock%}
 {% block body%}
-{% for post in posts %}
-      <div style="height:10%">        
-      <h3><a href="{{url_for('post',post_id=post.id)}}">{{ post.title }}</a></h3>
-        {{ post.text | truncate(100) | safe }}
-        <p> <a href="{{url_for('post',post_id=post.id)}}">详情</a></p> 
-        <div style="padding: 5px 0;color: #999;font: normal 12px/24px Arial;text-align: right;">	
-    <span class="glyphicon glyphicon-tag">标签 </span>
-    {%for tag in post.tag%}<a href="{{url_for('tag',tag=tag)}}"><strong>{{tag}}</strong></a> {%endfor%}
-	&nbsp;
-    <span  style="margin: 0 5px 0 0;">&nbsp;日期： {{ moment(post.publish_date).format('LL') }}&nbsp;</span>
-    <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-comment"><a href='{{url_for('post',post_id=post.id)}}'>&nbsp;评论&nbsp;</a></span>
-    <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-eye-open"><a href='{{url_for('post',post_id=post.id)}}'>&nbsp;阅读&nbsp;</a></span></div>
-	</div>
+    {% for post in posts %}
+        <div style="height:10%">
+            <h3>
+                <a href="{{url_for('post',post_id=post.id)}}">{{ post.title }}</a>
+            </h3>
+            {{ post.text | truncate(100) | safe }}
+            <p>
+                <a href="{{url_for('post',post_id=post.id)}}">详情</a>
+            </p>
+            <div style="padding: 5px 0;color: #999;font: normal 12px/24px Arial;text-align: right;">
+                <span class="glyphicon glyphicon-tag">标签 </span>
+                {%for tag in post.tag%}
+                    <a href="{{url_for('tag',tag=tag)}}">
+                        <strong>{{tag}}</strong></a>
+                {%endfor%}
+                &nbsp;
+                <span  style="margin: 0 5px 0 0;">&nbsp;日期： {{ moment(post.publish_date).format('LL') }}&nbsp;</span>
+                <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-comment">
+                    <a href='{{url_for('post',post_id=post.id)}}'>&nbsp;评论&nbsp;</a>
+                </span>
+                <span  style="margin: 0 5px 0 0;" class="glyphicon glyphicon-eye-open">
+                    <a href='{{url_for('post',post_id=post.id)}}'>&nbsp;阅读&nbsp;</a>
+                </span>
+            </div>
+        </div>
     {% endfor %}
     {%for page in pages%}
-    <ul class="pagination">
-<li> <a id='{{page}}' onclick="h=window.location.href.split('&')[0],m=document.getElementById({{page}}),m.setAttribute('href',h+'&'+{{page}})" style='background-color: lightgoldenrodyellow;color: brown;'>{{page}}</a></li>
-</ul>
-{%endfor%}
-    {% endblock %}
+        <ul class="pagination">
+            <li>
+                <a id='{{page}}' onclick="h=window.location.href.split('&')[0],m=document.getElementById({{page}}),m.setAttribute('href',h+'&'+{{page}})" style='background-color: lightgoldenrodyellow;color: brown;'>{{page}}</a>
+            </li>
+        </ul>
+    {%endfor%}
+{% endblock %}
 {% block tuijian %}
-	{%for tui in tuijian_post%}
-	<p><a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a></p>
-	{%endfor%}
-        {% endblock %}
+    {%for tui in tuijian_post%}
+        <p>
+            <a href='{{url_for('post',post_id=tui.id)}}'>{{tui.title}}</a>
+        </p>
+    {%endfor%}
+{% endblock %}
 {%block link%}
-{%for link1 in links%}
-<p><a href='{{link1.url}}'>{{link1.name}}</a></P>
-{%endfor%}
+    {%for link1 in links%}
+        <p>
+            <a href='{{link1.url}}'>{{link1.name}}</a>
+        </p>
+    {%endfor%}
 {% endblock %}

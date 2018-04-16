@@ -12,4 +12,3 @@ def list_qiepian(list,split):
 	if len(list[me*split:])>0:
 		New_list.append(list[me*split:])
 	return New_list
-
